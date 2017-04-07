@@ -37,14 +37,11 @@ const Editor = React.createClass({
                 >
                 </textarea>
 
-                <textarea value={this.state.outputFormula}
-                          placeholder="output"
-                          id="output"
-                >
-                </textarea>
+                <span id="output">
+                    {this.state.outputFormula}
+                </span>
 
                 <button onClick={this.processInputFormula}>Process</button>
-
             </div>
         )
     }

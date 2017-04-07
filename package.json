@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "watch": "webpack --watch -d"
+    "watch": "webpack --watch -d",
+    "start": "nodemon app.js"
   },
   "dependencies": {
     "axios": "^0.15.3",
