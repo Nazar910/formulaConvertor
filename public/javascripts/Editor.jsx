@@ -6,7 +6,8 @@ const Editor = React.createClass({
     getInitialState(){
         return {
             inputFormula: '',
-            outputFormula: ''
+            outputFormula: '',
+            error: ''
         }
     },
     onInputFormulaChange(event){
@@ -18,19 +19,29 @@ const Editor = React.createClass({
         return axios.post('/api', { formula: value });
     },
     processInputFormula(){
-        let input = this.state.inputFormula;
+        const input = this.state.inputFormula;
         this.convertToClassicView(input)
             .then(({ data }) => {
-                let formula = data.body.formula;
-                this.setState({
-                    outputFormula: formula
-                });
+                const formula = data.body.formula;
+                let state = {
+                    outputFormula: formula,
+                    error: ''
+                };
+
+                if (formula.error) {
+                    state = {
+                        error: formula.error,
+                        outputFormula: ''
+                    }
+                }
+
+                this.setState(state);
             })
     },
     render() {
         return(
             <div>
-
+                {this.state.error}
                 <textarea value={this.state.inputFormula}
                           placeholder="input"
                           onChange={this.onInputFormulaChange}
