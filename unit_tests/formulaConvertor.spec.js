@@ -2,6 +2,12 @@ const expect = require('chai').expect;
 
 const formulaConverter = require('../lib/formulaConverter');
 
+const sqrt = '<table style="border-spacing:0px;border-width:0px;'
++ 'font-family:verdana;"><tr><td>&nbsp;</td><td>_______</td></tr>'
++ '<tr><td style="padding:0px; font-size:larger"> &radic; </td>'
++ '<td style="padding:0px;">&nbsp;x&nbsp;'
++ '</td></tr></table>';
+
 describe('translate', ()=> {
     it('should return error "count of parentheses are not even" to (x', () => {
         const actual = formulaConverter.translatePascalToClassic('(x');
@@ -62,9 +68,14 @@ describe('translatePascalToClassic', () => {
         expect(actual).to.equal('ln(x)');
     });
 
-    it('should return log2(x) to log2(x)', () => {
+    it('should return log<sub>2</sub>(x) to log2(x)', () => {
         const actual = formulaConverter.translatePascalToClassic('log2(x)');
-        expect(actual).to.equal('log2(x)');
+        expect(actual).to.equal('log<sub>2</sub>(x)');
+    });
+
+    it('should return to sqrt(x)', () => {
+        const actual = formulaConverter.translatePascalToClassic('sqrt(x)');
+        expect(actual).to.equal(sqrt);
     });
 
 });
@@ -97,9 +108,14 @@ describe('translateCtoClassic', () => {
         expect(actual).to.equal('ln(x)');
     });
 
-    it('should return log2(x) to log2(x)', () => {
+    it('should return log<sub>2</sub>(x) to log2(x)', () => {
         const actual = formulaConverter.translateCtoClassic('log2(x)');
-        expect(actual).to.equal('log2(x)');
+        expect(actual).to.equal('log<sub>2</sub>(x)');
+    });
+
+    it('should return to sqrt(x)', () => {
+        const actual = formulaConverter.translateCtoClassic('sqrt(x)');
+        expect(actual).to.equal(sqrt);
     });
 
 });
@@ -131,9 +147,14 @@ describe('translateFortranToClassic', () => {
         expect(actual).to.equal('ln(x)');
     });
 
-    it('should return log2(x) to log2(x)', () => {
+    it('should return log<sub>2</sub>(x) to log2(x)', () => {
         const actual = formulaConverter.translateFortranToClassic('log2(x)');
-        expect(actual).to.equal('log2(x)');
+        expect(actual).to.equal('log<sub>2</sub>(x)');
+    });
+
+    it('should return to sqrt(x)', () => {
+        const actual = formulaConverter.translateFortranToClassic('sqrt(x)');
+        expect(actual).to.equal(sqrt);
     });
 
 });
