@@ -8,7 +8,8 @@ const Editor = React.createClass({
         return {
             inputFormula: '',
             outputFormula: '',
-            error: ''
+            error: '',
+            lang: 'c/c++'
         }
     },
     onInputFormulaChange(event){
@@ -17,7 +18,7 @@ const Editor = React.createClass({
     },
 
     convertToClassicView(value){
-        return axios.post('/api', { formula: value });
+        return axios.post('/api', { formula: value, lang: this.state.lang });
     },
     processInputFormula(){
         const input = this.state.inputFormula;
@@ -56,6 +57,12 @@ const Editor = React.createClass({
         saveAs(blob, "RAW.xml");
     },
 
+    onLangChange(event){
+        this.setState({
+            lang: event.target.value
+        })
+    },
+
     render() {
         return(
             <div>
@@ -79,11 +86,13 @@ const Editor = React.createClass({
                 <br/>
                 <div className="form-group">
                     <label>Select language:</label>
-                    <select className="form-control" id="select_lang">
-                        <option value="">1</option>
-                        <option value="">2</option>
-                        <option value="">3</option>
-                        <option value="">4</option>
+                    <select className="form-control"
+                            id="select_lang"
+                            value={this.state.lang}
+                            onChange={this.onLangChange}>
+                        <option>c/c++</option>
+                        <option>pascal</option>
+                        <option>fortran</option>
                     </select>
                 </div>
 
