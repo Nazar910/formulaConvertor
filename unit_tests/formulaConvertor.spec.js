@@ -62,9 +62,9 @@ describe('translatePascalToClassic', () => {
         expect(actual).to.equal('ln(x)');
     });
 
-    it('should return log2(x) to log2(x)', () => {
+    it('should return log<sub>2</sub>(x) to log2(x)', () => {
         const actual = formulaConverter.translatePascalToClassic('log2(x)');
-        expect(actual).to.equal('log2(x)');
+        expect(actual).to.equal('log<sub>2</sub>(x)');
     });
 
 });
@@ -97,9 +97,9 @@ describe('translateCtoClassic', () => {
         expect(actual).to.equal('ln(x)');
     });
 
-    it('should return log2(x) to log2(x)', () => {
+    it('should return log<sub>2</sub>(x) to log2(x)', () => {
         const actual = formulaConverter.translateCtoClassic('log2(x)');
-        expect(actual).to.equal('log2(x)');
+        expect(actual).to.equal('log<sub>2</sub>(x)');
     });
 
 });
@@ -131,9 +131,9 @@ describe('translateFortranToClassic', () => {
         expect(actual).to.equal('ln(x)');
     });
 
-    it('should return log2(x) to log2(x)', () => {
+    it('should return log<sub>2</sub>(x) to log2(x)', () => {
         const actual = formulaConverter.translateFortranToClassic('log2(x)');
-        expect(actual).to.equal('log2(x)');
+        expect(actual).to.equal('log<sub>2</sub>(x)');
     });
 
 });
