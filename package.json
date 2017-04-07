@@ -11,8 +11,9 @@
     "body-parser": "~1.17.1",
     "express": "~4.15.2",
     "jade": "~1.11.0",
-    "react": "^15.4.2",
-    "react-dom": "^15.4.2",
+    "react": "^15.5.0",
+    "react-bootstrap": "^0.30.8",
+    "react-dom": "^15.5.0",
     "react-render-html": "^0.1.6"
   },
   "devDependencies": {

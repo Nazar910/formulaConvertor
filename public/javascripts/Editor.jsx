@@ -38,6 +38,15 @@ const Editor = React.createClass({
                 this.setState(state);
             })
     },
+    SaveToImg() {
+        html2canvas($("#output"), {
+            onrendered: function(canvas) {
+                document.location.href = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+
+            }
+        });
+    },
+
     render() {
         return(
             <div>
@@ -51,7 +60,7 @@ const Editor = React.createClass({
                 <span id="output">
                     {renderHTML(this.state.outputFormula)}
                 </span>
-
+                <button onClick={this.SaveToImg}>Save Formula to Image</button>
                 <button onClick={this.processInputFormula}>Process</button>
             </div>
         )
