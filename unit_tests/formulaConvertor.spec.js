@@ -32,14 +32,39 @@ describe('translatePascalToClassic', () => {
         expect(actual).to.equal('x<sup\>2</sup>');
     });
 
-    it('should return sin x to Sin(x)', () => {
+    it('should return sin(x) to Sin(x)', () => {
         const actual = formulaConverter.translatePascalToClassic('Sin(x)');
-        expect(actual).to.equal('sin x');
+        expect(actual).to.equal('sin(x)');
     });
 
-    it('should return cos x to Cos(x)', () => {
+    it('should return cos(x) to Cos(x)', () => {
         const actual = formulaConverter.translatePascalToClassic('Cos(x)');
-        expect(actual).to.equal('cos x');
+        expect(actual).to.equal('cos(x)');
+    });
+
+    it('should return x<sup\>2</sup>+1 to x^2+1', () => {
+        const actual = formulaConverter.translatePascalToClassic('x^2+1');
+        expect(actual).to.equal('x<sup\>2</sup>+1');
+    });
+
+    it('should return x<sup\>2</sup>+cos(x) to x^2+Cos(x)', () => {
+        const actual = formulaConverter.translatePascalToClassic('x^2+Cos(x)');
+        expect(actual).to.equal('x<sup\>2</sup>+cos(x)');
+    });
+
+    it('should return lg(x) to log10(x)', () => {
+        const actual = formulaConverter.translatePascalToClassic('log10(x)');
+        expect(actual).to.equal('lg(x)');
+    });
+
+    it('should return ln(x) to ln(x)', () => {
+        const actual = formulaConverter.translatePascalToClassic('ln(x)');
+        expect(actual).to.equal('ln(x)');
+    });
+
+    it('should return log2(x) to log2(x)', () => {
+        const actual = formulaConverter.translatePascalToClassic('log2(x)');
+        expect(actual).to.equal('log2(x)');
     });
 
 });
@@ -48,18 +73,33 @@ describe('translatePascalToClassic', () => {
 describe('translateCtoClassic', () => {
 
     it('should return x<sup\>2</sup> to math.pow(x,2)', () => {
-        const actual = formulaConverter.translateCtoClassic('math.pow(x,2)');
+        const actual = formulaConverter.translateCtoClassic('pow(x,2)');
         expect(actual).to.equal('x<sup\>2</sup>');
     });
 
-    it('should return sin x to math.sin(x)', () => {
-        const actual = formulaConverter.translateCtoClassic('math.sin(x)');
-        expect(actual).to.equal('sin x');
+    it('should return sin(x) to math.sin(x)', () => {
+        const actual = formulaConverter.translateCtoClassic('sin(x)');
+        expect(actual).to.equal('sin(x)');
     });
 
-    it('should return cos x to math.cos(x)', () => {
-        const actual = formulaConverter.translateCtoClassic('math.cos(x)');
-        expect(actual).to.equal('cos x');
+    it('should return cos(x) to math.cos(x)', () => {
+        const actual = formulaConverter.translateCtoClassic('cos(x)');
+        expect(actual).to.equal('cos(x)');
+    });
+
+    it('should return lg(x) to log10(x)', () => {
+        const actual = formulaConverter.translateCtoClassic('log10(x)');
+        expect(actual).to.equal('lg(x)');
+    });
+
+    it('should return ln(x) to log(x)', () => {
+        const actual = formulaConverter.translateCtoClassic('log(x)');
+        expect(actual).to.equal('ln(x)');
+    });
+
+    it('should return log2(x) to log2(x)', () => {
+        const actual = formulaConverter.translateCtoClassic('log2(x)');
+        expect(actual).to.equal('log2(x)');
     });
 
 });
@@ -71,14 +111,29 @@ describe('translateFortranToClassic', () => {
         expect(actual).to.equal('x<sup\>2</sup>');
     });
 
-    it('should return sin x to sin(x)', () => {
+    it('should return sin(x) to sin(x)', () => {
         const actual = formulaConverter.translateFortranToClassic('sin(x)');
-        expect(actual).to.equal('sin x');
+        expect(actual).to.equal('sin(x)');
     });
 
-    it('should return cos x to cos(x)', () => {
+    it('should return cos(x) to cos(x)', () => {
         const actual = formulaConverter.translateFortranToClassic('cos(x)');
-        expect(actual).to.equal('cos x');
+        expect(actual).to.equal('cos(x)');
+    });
+
+    it('should return lg(x) to log10(x)', () => {
+        const actual = formulaConverter.translateFortranToClassic('log10(x)');
+        expect(actual).to.equal('lg(x)');
+    });
+
+    it('should return ln(x) to log(x)', () => {
+        const actual = formulaConverter.translateFortranToClassic('log(x)');
+        expect(actual).to.equal('ln(x)');
+    });
+
+    it('should return log2(x) to log2(x)', () => {
+        const actual = formulaConverter.translateFortranToClassic('log2(x)');
+        expect(actual).to.equal('log2(x)');
     });
 
 });
