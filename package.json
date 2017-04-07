@@ -12,7 +12,8 @@
     "express": "~4.15.2",
     "jade": "~1.11.0",
     "react": "^15.4.2",
-    "react-dom": "^15.4.2"
+    "react-dom": "^15.4.2",
+    "react-render-html": "^0.1.6"
   },
   "devDependencies": {
     "babel-cli": "^6.24.0",

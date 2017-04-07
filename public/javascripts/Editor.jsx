@@ -1,6 +1,6 @@
 const React = require('react');
 const axios = require('axios');
-
+const renderHTML = require('react-render-html');
 
 const Editor = React.createClass({
     getInitialState(){
@@ -49,7 +49,7 @@ const Editor = React.createClass({
                 </textarea>
 
                 <span id="output">
-                    {this.state.outputFormula}
+                    {renderHTML(this.state.outputFormula)}
                 </span>
 
                 <button onClick={this.processInputFormula}>Process</button>
