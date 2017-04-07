@@ -38,6 +38,28 @@ const Editor = React.createClass({
                 this.setState(state);
             })
     },
+    SaveToImg() {
+       /* html2canvas($("#output"), {
+            onrendered: function(canvas) {
+                theCanvas = canvas;
+                document.body.appendChild(canvas);
+
+                // Convert and download as image
+                Canvas2Image.saveAsPNG(canvas);
+                $("#img-out").append(canvas);
+                // Clean up
+                //document.body.removeChild(canvas);
+            }
+        });*/
+        html2canvas($("#output"), {
+            onrendered: function(canvas) {
+              //  document.body.appendChild(canvas);
+                document.location.href = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+
+            }
+        });
+    },
+
     render() {
         return(
             <div>
@@ -51,8 +73,9 @@ const Editor = React.createClass({
                 <span id="output">
                     {renderHTML(this.state.outputFormula)}
                 </span>
-
+                <button onClick={this.SaveToImg}>Save Formula to Image</button>
                 <button onClick={this.processInputFormula}>Process</button>
+                <div id="img-out"></div>
             </div>
         )
     }
