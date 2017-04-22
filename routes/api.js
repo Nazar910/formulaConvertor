@@ -1,34 +1,10 @@
 const express = require('express');
 const router = express.Router();
 
-const formulaConverter = require('../lib/formulaConverter');
+const languageController = require('../controllers/language');
 
-router.post('/', function(req, res, next) {
-
-    const { formula: inputFormula, lang } = req.body;
-
-    let formula;
-    switch(lang) {
-        case 'c/c++': {
-            formula = formulaConverter.translateCtoClassic(inputFormula);
-            break;
-        }
-        case 'pascal': {
-            formula = formulaConverter.translatePascalToClassic(inputFormula);
-            break;
-        }
-        case 'fortran': {
-            formula = formulaConverter.translateFortranToClassic(inputFormula);
-            break;
-        }
-    }
-
-    res.json({
-      body: {
-          formula
-      }
-    });
-
-});
+router.post('/pascal', languageController.pascal);
+router.post('/c', languageController.c);
+router.post('/fortran', languageController.fortran);
 
 module.exports = router;
