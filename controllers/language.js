@@ -2,40 +2,30 @@ const router = require('express').Router;
 
 const formulaConverter = require('../lib/formulaConverter');
 
-function pascal(req, res, next) {
+function translate(req, res, specificTranslate) {
+
     const { formula: inputFormula } = req.body;
 
-    const formula = formulaConverter.translatePascalToClassic(inputFormula);
+    const formula = specificTranslate(inputFormula);
 
     res.json({
         body: {
             formula
         }
     });
+
+}
+
+function pascal(req, res, next) {
+    translate(req, res, formulaConverter.translatePascalToClassic)
 }
 
 function c(req, res, next) {
-    const { formula: inputFormula } = req.body;
-
-    const formula = formulaConverter.translateCtoClassic(inputFormula);
-
-    res.json({
-        body: {
-            formula
-        }
-    });
+    translate(req, res, formulaConverter.translateCtoClassic)
 }
 
 function fortran(req, res, next) {
-    const { formula: inputFormula } = req.body;
-
-    const formula = formulaConverter.translateFortranToClassic(inputFormula);
-
-    res.json({
-        body: {
-            formula
-        }
-    });
+    translate(req, res, formulaConverter.translateFortranToClassic)
 }
 
 module.exports.pascal = pascal;
