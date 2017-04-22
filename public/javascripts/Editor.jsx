@@ -9,7 +9,7 @@ const Editor = React.createClass({
             inputFormula: '',
             outputFormula: '',
             error: '',
-            lang: 'c/c++'
+            lang: 'c'
         }
     },
     onInputFormulaChange(event){
@@ -18,7 +18,7 @@ const Editor = React.createClass({
     },
 
     convertToClassicView(value){
-        return axios.post('/api', { formula: value, lang: this.state.lang });
+        return axios.post(`/api/${this.state.lang}`, { formula: value });
     },
     processInputFormula(){
         const input = this.state.inputFormula;
@@ -90,7 +90,7 @@ const Editor = React.createClass({
                             id="select_lang"
                             value={this.state.lang}
                             onChange={this.onLangChange}>
-                        <option>c/c++</option>
+                        <option>c</option>
                         <option>pascal</option>
                         <option>fortran</option>
                     </select>
