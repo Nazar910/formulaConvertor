@@ -1,12 +1,12 @@
 var path = require('path');
 
 module.exports = {
-    entry: './public/javascripts/main.js',
+    entry: './react-src/public/javascripts/main.js',
     devtool: 'sourcemaps',
     cache: true,
     output: {
         path: __dirname,
-        filename: './public/javascripts/built/bundle.js'
+        filename: './react-src/public/javascripts/built/bundle.js'
     },
     module: {
         loaders: [
