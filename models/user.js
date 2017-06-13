@@ -4,30 +4,45 @@ const Formula = require('./formula.js');
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+const bcrypt = require('bcryptjs');
+
 const userSchema = new Schema({
     name: String,
     lastName: String,
     email: String,
     password: String,
     company: String
-}, {
-    timestamps: true
-})
+});
 
 Object.assign(userSchema.statics, {
 
     findByEmail(email) {
-      return this.find({
+      return this.findOne({
         email
       })
+    },
+
+    findById(id) {
+        return this.findOne({
+            _id: id
+        })
     }
 
-})
+});
 
 Object.assign(userSchema.methods, {
 
     getUserFormulas() {
-      return Formula.findByUserId(this._id);
+        return Formula.findByUserId(this._id);
+    },
+
+    async hashPassword() {
+        const salt = await bcrypt.genSalt(10);
+        this.password = await bcrypt.hash(this.password, salt);
+    },
+
+    isValidPassword(candidatePassword) {
+        return bcrypt.compare(candidatePassword, this.password);
     }
 });
 

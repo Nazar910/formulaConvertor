@@ -22,7 +22,7 @@ Object.assign(formulaSchema.statics, {
 
     FORTRAN,
     C,
-    PASCAL
+    PASCAL,
 
     findByUserId(userId) {
       return this.find({
