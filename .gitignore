@@ -1,4 +1,4 @@
 node_modules
-public/javascripts/built
+react-src/public/javascripts/built
 .idea
 npm-debug.log
