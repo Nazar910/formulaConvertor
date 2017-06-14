@@ -72,37 +72,18 @@ describe('translatePascalToClassic', () => {
 });
 
 
-xdescribe('translateCtoClassic', () => {
+describe('translateCtoClassic', () => {
 
-    it('should return x<sup\>2</sup> to math.pow(x,2)', () => {
-        const actual = formulaConverter.translateCtoClassic('pow(x,2)');
-        expect(actual).to.equal('x<sup\>2</sup>');
-    });
+    const data = require('./data/c.json');
 
-    it('should return sin(x) to math.sin(x)', () => {
-        const actual = formulaConverter.translateCtoClassic('sin(x)');
-        expect(actual).to.equal('sin(x)');
-    });
+    for (const key of Object.keys(data)) {
 
-    it('should return cos(x) to math.cos(x)', () => {
-        const actual = formulaConverter.translateCtoClassic('cos(x)');
-        expect(actual).to.equal('cos(x)');
-    });
+        it(key, () => {
+            const actual = formulaConverter.translateCtoClassic(data[key].formula);
+            expect(actual).to.equal(data[key].expected);
+        });
 
-    it('should return lg(x) to log10(x)', () => {
-        const actual = formulaConverter.translateCtoClassic('log10(x)');
-        expect(actual).to.equal('lg(x)');
-    });
-
-    it('should return ln(x) to log(x)', () => {
-        const actual = formulaConverter.translateCtoClassic('log(x)');
-        expect(actual).to.equal('ln(x)');
-    });
-
-    it('should return log<sub>2</sub>(x) to log2(x)', () => {
-        const actual = formulaConverter.translateCtoClassic('log2(x)');
-        expect(actual).to.equal('log<sub>2</sub>(x)');
-    });
+    }
 
     it('should return to sqrt(x)', () => {
         const actual = formulaConverter.translateCtoClassic('sqrt(x)');
