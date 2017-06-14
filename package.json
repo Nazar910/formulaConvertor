@@ -5,7 +5,8 @@
   "scripts": {
     "watch": "webpack --watch -d",
     "api": "nodemon app.js",
-    "frontend": "nodemon ./react-src/web.js"
+    "frontend": "nodemon ./react-src/web.js",
+    "test": "mocha unit_tests"
   },
   "dependencies": {
     "axios": "^0.15.3",
