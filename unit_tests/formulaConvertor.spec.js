@@ -38,9 +38,9 @@ describe('translate', ()=> {
 
 describe('translatePascalToClassic', () => {
 
-    it('should return x<sup\>2</sup> to x^2', () => {
+    it('should return x<sup>2</sup> to x^2', () => {
         const actual = formulaConverter.translatePascalToClassic('x^2');
-        expect(actual).to.equal('x<sup\>2</sup>');
+        expect(actual).to.equal('x<sup>2</sup>');
     });
 
     it('should return sin(x) to Sin(x)', () => {
@@ -53,14 +53,14 @@ describe('translatePascalToClassic', () => {
         expect(actual).to.equal('cos(x)');
     });
 
-    it('should return x<sup\>2</sup>+1 to x^2+1', () => {
+    it('should return x<sup>2</sup>+1 to x^2+1', () => {
         const actual = formulaConverter.translatePascalToClassic('x^2+1');
         expect(actual).to.equal('x<sup\>2</sup>+1');
     });
 
-    it('should return x<sup\>2</sup>+cos(x) to x^2+Cos(x)', () => {
+    it('should return x<sup>2</sup>+cos(x) to x^2+Cos(x)', () => {
         const actual = formulaConverter.translatePascalToClassic('x^2+Cos(x)');
-        expect(actual).to.equal('x<sup\>2</sup>+cos(x)');
+        expect(actual).to.equal('x<sup>2</sup>+cos(x)');
     });
 
     it('should return lg(x) to log10(x)', () => {
@@ -87,10 +87,22 @@ describe('translatePascalToClassic', () => {
         const actual = formulaConverter.translatePascalToClassic('sqrt(x^2)');
         expect(actual).to.equal(sqrtX2);
     });
+
+    it('should return x<sup>x<sup>2</sup></sup> to x^(x^2)', () => {
+        "use strict";
+        const actual = formulaConverter.translatePascalToClassic('x^(x^(2))');
+        expect(actual).to.equal('x<sup>x<sup>2</sup></sup>');
+    });
+
+    it('should return x<sup>x<sup>x<sup>2</sup></sup></sup> to x^(x^(x^(2)))', () => {
+        "use strict";
+        const actual = formulaConverter.translatePascalToClassic('x^x^x^2');
+        expect(actual).to.equal('x<sup>x<sup>x<sup>2</sup></sup></sup>');
+    })
 });
 
 
-describe('translateCtoClassic', () => {
+xdescribe('translateCtoClassic', () => {
 
     it('should return x<sup\>2</sup> to math.pow(x,2)', () => {
         const actual = formulaConverter.translateCtoClassic('pow(x,2)');
@@ -129,7 +141,7 @@ describe('translateCtoClassic', () => {
 
 });
 
-describe('translateFortranToClassic', () => {
+xdescribe('translateFortranToClassic', () => {
 
     it('should return x<sup\>2</sup> to math.pow(x,2)', () => {
         const actual = formulaConverter.translateFortranToClassic('x**2');
