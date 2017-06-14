@@ -90,43 +90,34 @@ describe('translateCtoClassic', () => {
         expect(actual).to.equal(sqrt);
     });
 
+    it('should return to a=sqrt(pow(x,2)+pow(y,2))', () => {
+        const actual = formulaConverter.translateCtoClassic('a=sqrt(pow(x,2)+pow(y,2))');
+        expect(actual).to.equal('a=' + sqrtX2PlusY2);
+    })
+
 });
 
-xdescribe('translateFortranToClassic', () => {
+describe('translateFortranToClassic', () => {
 
-    it('should return x<sup\>2</sup> to math.pow(x,2)', () => {
-        const actual = formulaConverter.translateFortranToClassic('x**2');
-        expect(actual).to.equal('x<sup\>2</sup>');
-    });
+    const data = require('./data/fortran.json');
 
-    it('should return sin(x) to sin(x)', () => {
-        const actual = formulaConverter.translateFortranToClassic('sin(x)');
-        expect(actual).to.equal('sin(x)');
-    });
+    for (const key of Object.keys(data)) {
 
-    it('should return cos(x) to cos(x)', () => {
-        const actual = formulaConverter.translateFortranToClassic('cos(x)');
-        expect(actual).to.equal('cos(x)');
-    });
+        it(key, () => {
+            const actual = formulaConverter.translateFortranToClassic(data[key].formula);
+            expect(actual).to.equal(data[key].expected);
+        });
 
-    it('should return lg(x) to log10(x)', () => {
-        const actual = formulaConverter.translateFortranToClassic('log10(x)');
-        expect(actual).to.equal('lg(x)');
-    });
-
-    it('should return ln(x) to log(x)', () => {
-        const actual = formulaConverter.translateFortranToClassic('log(x)');
-        expect(actual).to.equal('ln(x)');
-    });
-
-    it('should return log<sub>2</sub>(x) to log2(x)', () => {
-        const actual = formulaConverter.translateFortranToClassic('log2(x)');
-        expect(actual).to.equal('log<sub>2</sub>(x)');
-    });
+    }
 
     it('should return to sqrt(x)', () => {
         const actual = formulaConverter.translateFortranToClassic('sqrt(x)');
         expect(actual).to.equal(sqrt);
     });
+
+    it('should return to a=sqrt(x**2+y**2)', () => {
+        const actual = formulaConverter.translateFortranToClassic('a=sqrt(x**2+y**2)');
+        expect(actual).to.equal('a=' + sqrtX2PlusY2);
+    })
 
 });
