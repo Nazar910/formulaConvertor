@@ -26,8 +26,12 @@ async function create(req, res) {
     })
 }
 
-function getAllForUser(userId) {
-    return Formula.findByUserId(userId);
+async function getAllForUser(req, res) {
+    const { userId } = req.params;
+
+    const formulas = await Formula.findByUserId(userId);
+
+    res.json(formulas);
 }
 
 module.exports.create = create;

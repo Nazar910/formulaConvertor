@@ -109,8 +109,6 @@ describe('app', () => {
 
         describe('create', () => {
 
-
-
             describe('with valid body', () => {
 
                 it('should create a formula', async () => {
@@ -140,16 +138,16 @@ describe('app', () => {
 
             });
 
-            xdescribe('with undefined userBody', () => {
+            describe('with undefined formulaBody', () => {
 
                 it('should cause an error', async () => {
 
                     try {
-                        const userBody = {};
-                        const resp = await axios.post('http://localhost:3300/api/users/', userBody);
+                        const formulaBody = {};
+                        const resp = await axios.post(`http://localhost:3300/api/formulas/${user._id}`, formulaBody);
 
                         expect(resp.data).to.deep.equal({
-                            error: ['Userbody is undefined!']
+                            error: ['FormulasBody is undefined!']
                         });
                     } catch (e) {
                         throw e;
@@ -159,7 +157,63 @@ describe('app', () => {
 
             });
 
-        })
+        });
+
+        describe('getAllForUser', () => {
+
+            let user;
+            beforeEach(async () => {
+
+                try {
+                    const userBody = {
+                        user: {
+                            name: 'Name',
+                            lastName: 'lastName',
+                            email: 'email@example.com',
+                            password: 'qwerty',
+                            company: 'some'
+                        }
+                    };
+                    const resp = await axios.post('http://localhost:3300/api/users/', userBody);
+                    user = resp.data;
+
+                    const formulaBody = {
+                        formula: {
+                            body: 'x^2',
+                            classicView: 'x<sup>2</sup>',
+                            language: Formula.PASCAL
+                        }
+                    };
+                    await axios.post(`http://localhost:3300/api/formulas/${user._id}`, formulaBody);
+
+
+                } catch (e) {
+                    throw e;
+                }
+
+            });
+
+            it('should get user formulas', async () => {
+
+                try {
+                    const resp = await axios.get(`http://localhost:3300/api/formulas/${user._id}`);
+
+                    const actualData = resp.data.map(formula => _.pick(formula, ['body', 'classicView', 'language']));
+
+                    expect(actualData).to.deep.equal([{
+                        body: 'x^2',
+                        classicView: 'x<sup>2</sup>',
+                        language: Formula.PASCAL
+                    }]);
+
+                } catch (e) {
+                    console.error(e);
+                    throw e;
+                }
+
+            });
+
+        });
 
     });
 
