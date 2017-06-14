@@ -13,6 +13,12 @@ const sqrtX2 = '<table style="border-spacing:0px;border-width:0px;'
     + '<td style="padding:0px;">&nbsp;x<sup>2</sup>&nbsp;'
     + '</td></tr></table>';
 
+const sqrtX2PlusY2 = '<table style="border-spacing:0px;border-width:0px;'
+    + 'font-family:verdana;"><tr><td>&nbsp;</td><td>_______</td></tr>'
+    + '<tr><td style="padding:0px; font-size:larger"> &radic; </td>'
+    + '<td style="padding:0px;">&nbsp;x<sup>2</sup>'
+    + '+y<sup>2</sup>&nbsp;</td></tr></table>';
+
 describe('translate', ()=> {
     it('should return error "count of parentheses are not even" to (x', () => {
         const actual = formulaConverter.translatePascalToClassic('(x');
@@ -58,6 +64,11 @@ describe('translatePascalToClassic', () => {
         const actual = formulaConverter.translatePascalToClassic('sqrt(x^2)');
         expect(actual).to.equal(sqrtX2);
     });
+
+    it('should return to a=sqrt(x^2+y^2)', () => {
+        const actual = formulaConverter.translatePascalToClassic('a=sqrt(x^2+y^2)');
+        expect(actual).to.equal('a=' + sqrtX2PlusY2);
+    })
 });
 
 
