@@ -38,8 +38,8 @@ describe('translate', ()=> {
 
 describe('translatePascalToClassic', () => {
 
-    it('should return x<sup\>2</sup> to x^2', () => {
-        const actual = formulaConverter.translatePascalToClassic('x^2');
+    it('should return x<sup\>2</sup> to x^(2)', () => {
+        const actual = formulaConverter.translatePascalToClassic('x^(2)');
         expect(actual).to.equal('x<sup\>2</sup>');
     });
 
@@ -53,13 +53,13 @@ describe('translatePascalToClassic', () => {
         expect(actual).to.equal('cos(x)');
     });
 
-    it('should return x<sup\>2</sup>+1 to x^2+1', () => {
-        const actual = formulaConverter.translatePascalToClassic('x^2+1');
+    it('should return x<sup\>2</sup>+1 to x^(2)+1', () => {
+        const actual = formulaConverter.translatePascalToClassic('x^(2)+1');
         expect(actual).to.equal('x<sup\>2</sup>+1');
     });
 
-    it('should return x<sup\>2</sup>+cos(x) to x^2+Cos(x)', () => {
-        const actual = formulaConverter.translatePascalToClassic('x^2+Cos(x)');
+    it('should return x<sup\>2</sup>+cos(x) to x^(2)+Cos(x)', () => {
+        const actual = formulaConverter.translatePascalToClassic('x^(2)+Cos(x)');
         expect(actual).to.equal('x<sup\>2</sup>+cos(x)');
     });
 
@@ -83,10 +83,20 @@ describe('translatePascalToClassic', () => {
         expect(actual).to.equal(sqrt);
     });
 
-    it('should return to sqrt(x^2)', () => {
-        const actual = formulaConverter.translatePascalToClassic('sqrt(x^2)');
+    it('should return to sqrt(x^(2))', () => {
+        const actual = formulaConverter.translatePascalToClassic('sqrt(x^(2))');
         expect(actual).to.equal(sqrtX2);
     });
+
+    it('should return to x^(x^(2))', () => {
+        const actual = formulaConverter.translatePascalToClassic('x^(x^(2))');
+        expect(actual).to.equal('x<sup>x<sup>2</sup></sup>');
+    });
+
+    it('should return to x^(x^2)', () => {
+        const actual = formulaConverter.translatePascalToClassic('x^(x^(2))');
+        expect(actual).to.equal('x<sup>x<sup>2</sup></sup>');
+    })
 });
 
 
