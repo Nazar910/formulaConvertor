@@ -38,45 +38,16 @@ describe('translate', ()=> {
 
 describe('translatePascalToClassic', () => {
 
-    it('should return x<sup>2</sup> to x^2', () => {
-        const actual = formulaConverter.translatePascalToClassic('x^2');
-        expect(actual).to.equal('x<sup>2</sup>');
-    });
+    const data = require('./data/pascal.json');
 
-    it('should return sin(x) to Sin(x)', () => {
-        const actual = formulaConverter.translatePascalToClassic('Sin(x)');
-        expect(actual).to.equal('sin(x)');
-    });
+    for (const key of Object.keys(data)) {
 
-    it('should return cos(x) to Cos(x)', () => {
-        const actual = formulaConverter.translatePascalToClassic('Cos(x)');
-        expect(actual).to.equal('cos(x)');
-    });
+        it(key, () => {
+            const actual = formulaConverter.translatePascalToClassic(data[key].formula);
+            expect(actual).to.equal(data[key].expected);
+        });
 
-    it('should return x<sup>2</sup>+1 to x^2+1', () => {
-        const actual = formulaConverter.translatePascalToClassic('x^2+1');
-        expect(actual).to.equal('x<sup\>2</sup>+1');
-    });
-
-    it('should return x<sup>2</sup>+cos(x) to x^2+Cos(x)', () => {
-        const actual = formulaConverter.translatePascalToClassic('x^2+Cos(x)');
-        expect(actual).to.equal('x<sup>2</sup>+cos(x)');
-    });
-
-    it('should return lg(x) to log10(x)', () => {
-        const actual = formulaConverter.translatePascalToClassic('log10(x)');
-        expect(actual).to.equal('lg(x)');
-    });
-
-    it('should return ln(x) to ln(x)', () => {
-        const actual = formulaConverter.translatePascalToClassic('ln(x)');
-        expect(actual).to.equal('ln(x)');
-    });
-
-    it('should return log<sub>2</sub>(x) to log2(x)', () => {
-        const actual = formulaConverter.translatePascalToClassic('log2(x)');
-        expect(actual).to.equal('log<sub>2</sub>(x)');
-    });
+    }
 
     it('should return to sqrt(x)', () => {
         const actual = formulaConverter.translatePascalToClassic('sqrt(x)');
@@ -87,18 +58,6 @@ describe('translatePascalToClassic', () => {
         const actual = formulaConverter.translatePascalToClassic('sqrt(x^2)');
         expect(actual).to.equal(sqrtX2);
     });
-
-    it('should return x<sup>x<sup>2</sup></sup> to x^(x^2)', () => {
-        "use strict";
-        const actual = formulaConverter.translatePascalToClassic('x^(x^(2))');
-        expect(actual).to.equal('x<sup>x<sup>2</sup></sup>');
-    });
-
-    it('should return x<sup>x<sup>x<sup>2</sup></sup></sup> to x^(x^(x^(2)))', () => {
-        "use strict";
-        const actual = formulaConverter.translatePascalToClassic('x^x^x^2');
-        expect(actual).to.equal('x<sup>x<sup>x<sup>2</sup></sup></sup>');
-    })
 });
 
 
