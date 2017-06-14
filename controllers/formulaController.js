@@ -2,15 +2,36 @@
 const Formula = require('../models/formula');
 const _ = require('lodash');
 
-async function create(formulaBody) {
-    const formula = new Formula(_.pick(formulaBody, ['body', 'userId', 'classicView', 'language']));
+async function create(req, res) {
+    const { userId } = req.params;
 
-    await formula.save();
+    const { formula: formulaBody } = req.body;
+
+    if (!formulaBody) {
+        res.json({
+            error: ['FormulasBody is undefined!']
+        });
+        return;
+    }
+
+    let data = _.pick(formulaBody, ['body', 'classicView', 'language']);
+    data.userId = userId;
+
+    const formula = new Formula(data);
+
+    const result = await formula.save();
+
+    res.json({
+        formula: result
+    })
 }
 
-function getAllForUser(userId) {
+async function getAllForUser(req, res) {
+    const { userId } = req.params;
 
-    return Formula.findByUserId(userId);
+    const formulas = await Formula.findByUserId(userId);
+
+    res.json(formulas);
 }
 
 module.exports.create = create;

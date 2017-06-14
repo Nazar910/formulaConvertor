@@ -7,7 +7,10 @@ async function createUser(req, res) {
     const { user: userBody } = req.body;
 
     if (!userBody) {
-        throw new Error('Userbody is undefined!')
+        res.json({
+            error: ['Userbody is undefined!']
+        });
+        return;
     }
 
     const user = new User(
@@ -20,8 +23,10 @@ async function createUser(req, res) {
     res.json(user);
 }
 
-async function updateUser(userBody) {
-    const user = await User.findOne({ email: userBody.email });
+async function updateUser(req, res) {
+    const { user: userBody, userId } = req.body;
+
+    const user = await User.findById(userId);
 
     const userProperties
     = _.pick(userBody, ['email', 'name', 'lastName', 'password', 'company']);
@@ -79,10 +84,6 @@ async function authenticateUser(req, res) {
             company: user.company
         }
     })
-}
-
-async function profile() {
-
 }
 
 module.exports.createUser = createUser;
