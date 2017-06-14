@@ -1,0 +1,42 @@
+{
+  "should return x<sup>2</sup> to x**2": {
+    "formula": "x**2",
+    "expected": "x<sup>2</sup>"
+  },
+  "should return sin(x) to sin(x)": {
+    "formula": "sin(x)",
+    "expected": "sin(x)"
+  },
+  "should return cos(x) to cos(x)": {
+    "formula": "cos(x)",
+    "expected": "cos(x)"
+  },
+  "should return x<sup>2</sup>+1 to x**2+1": {
+    "formula": "x**2+1",
+    "expected": "x<sup>2</sup>+1"
+  },
+  "should return x<sup>2</sup>+cos(x) to x**2+cos(x)": {
+    "formula": "x**2+cos(x)",
+    "expected": "x<sup>2</sup>+cos(x)"
+  },
+  "should return lg(x) to log10(x)": {
+    "formula": "log10(x)",
+    "expected": "lg(x)"
+  },
+  "should return ln(x) to log(x)": {
+    "formula": "log(x)",
+    "expected": "ln(x)"
+  },
+  "should return log<sub>2</sub>(x) to log2(x)": {
+    "formula": "log2(x)",
+    "expected": "log<sub>2</sub>(x)"
+  },
+  "should return x<sup>x<sup>2</sup></sup> to x**(x**2)": {
+    "formula": "x**(x**2)",
+    "expected": "x<sup>x<sup>2</sup></sup>"
+  },
+  "should return x<sup>x<sup>x<sup>2</sup></sup></sup> to x**x**x**2": {
+    "formula": "x**x**x**2",
+    "expected": "(((x)<sup>x</sup>)<sup>x</sup>)<sup>2</sup>"
+  }
+}
