@@ -12,6 +12,22 @@ const Editor = React.createClass({
             lang: 'c/c++'
         }
     },
+
+    componentWillMount() {
+        const token = localStorage.getItem('token');
+        axios({
+            url: 'http://localhost:9000/api/users/profile',
+            method: 'GET',
+            headers: {
+                Authorization: token
+            }
+        }).then(data => {
+            if (data.statusCode === 403) {
+                window.location = 'login';
+            }
+        });
+    },
+
     onInputFormulaChange(event){
         let value = event.target.value;
         this.setState({ inputFormula: value });

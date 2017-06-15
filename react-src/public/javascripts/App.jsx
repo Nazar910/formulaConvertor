@@ -1,11 +1,21 @@
 const React = require('react');
 const Editor = require('./Editor.jsx');
+const Login = require('./Login.jsx');
+const Register = require('./Register.jsx');
+
+const { BrowserRouter, Switch, Route } = require('react-router-dom');
 
 
 const App = React.createClass({
     render(){
         return (
-            <Editor/>
+            <BrowserRouter>
+                <Switch>
+                    <Route exact path="/" component={Login}/>
+                    <Route path="/editor" component={Editor}/>
+                    <Route path="/register" component={Register}/>
+                </Switch>
+            </BrowserRouter>
         )
     }
 });

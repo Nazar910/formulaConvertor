@@ -12,6 +12,7 @@
     "axios": "^0.15.3",
     "bcryptjs": "^2.4.3",
     "body-parser": "~1.17.1",
+    "cors": "^2.8.3",
     "dotenv": "^4.0.0",
     "express": "~4.15.2",
     "jade": "~1.11.0",
@@ -22,7 +23,9 @@
     "react": "^15.5.0",
     "react-bootstrap": "^0.30.8",
     "react-dom": "^15.5.0",
-    "react-render-html": "^0.1.6"
+    "react-render-html": "^0.1.6",
+    "react-router": "^4.1.1",
+    "react-router-dom": "^4.1.1"
   },
   "devDependencies": {
     "babel-cli": "^6.24.0",
