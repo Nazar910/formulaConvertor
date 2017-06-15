@@ -118,7 +118,7 @@ describe('app', () => {
                             formula: {
                                 body: 'x^2',
                                 classicView: 'x<sup>2</sup>',
-                                language: Formula.PASCAL
+                                language: 'pascal'
                             }
                         };
                         const resp = await axios.post(`http://localhost:3300/api/formulas/${user._id}`, formulaBody);

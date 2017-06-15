@@ -2,6 +2,24 @@ const React = require('react');
 const axios = require('axios');
 const renderHTML = require('react-render-html');
 
+const FormulaList = require('./FormulaList.jsx');
+
+function getUserFormulas(userId) {
+    console.log('GET USER FORMULAS');
+    return new Promise((resolve, reject) => {
+        const token = localStorage.getItem('token');
+        axios({
+            url: `http://localhost:9000/api/formulas/${userId}`,
+            method: 'GET',
+            headers: {
+                Authorization: token
+            }
+        }).then(({data}) => {
+            console.log('FORMULAS', data);
+            resolve(data);
+        })
+    })
+}
 
 const Editor = React.createClass({
     getInitialState(){
@@ -9,11 +27,13 @@ const Editor = React.createClass({
             inputFormula: '',
             outputFormula: '',
             error: '',
-            lang: 'c/c++'
+            lang: 'c',
+            formulaList: [],
+            user: {}
         }
     },
 
-    componentWillMount() {
+    componentDidMount() {
         const token = localStorage.getItem('token');
         axios({
             url: 'http://localhost:9000/api/users/profile',
@@ -21,11 +41,27 @@ const Editor = React.createClass({
             headers: {
                 Authorization: token
             }
-        }).then(data => {
-            if (data.statusCode === 403) {
+        }).then(({data, statusCode}) => {
+            if (statusCode === 403) {
                 window.location = 'login';
+                return;
             }
-        });
+
+            return data.user;
+        }).then(user => {
+            console.log(user);
+
+            getUserFormulas(user._id)
+                .then(formulas => {
+                    console.log(formulas);
+                    this.setState({
+                        user: user,
+                        formulaList: formulas
+                    });
+                });
+
+        })
+
     },
 
     onInputFormulaChange(event){
@@ -34,26 +70,26 @@ const Editor = React.createClass({
     },
 
     convertToClassicView(value){
-        return axios.post('/api', { formula: value, lang: this.state.lang });
+        return axios.post('http://localhost:9000/api/formulas/' + this.state.user._id, { formula: value, lang: this.state.lang });
     },
     processInputFormula(){
         const input = this.state.inputFormula;
         this.convertToClassicView(input)
             .then(({ data }) => {
-                const formula = data.body.formula;
-                let state = {
-                    outputFormula: formula,
-                    error: ''
-                };
-
-                if (formula.error) {
-                    state = {
-                        error: formula.error,
-                        outputFormula: ''
-                    }
-                }
-
-                this.setState(state);
+                // const formula = data.formula;
+                // let state = {
+                //     formulaList: this.state.formulaList.push(formula),
+                //     error: ''
+                // };
+                //
+                // if (formula.error) {
+                //     state = {
+                //         error: formula.error,
+                //         outputFormula: ''
+                //     }
+                // }
+                //
+                // this.setState(state);
             })
     },
     saveToImg() {
@@ -77,6 +113,11 @@ const Editor = React.createClass({
         this.setState({
             lang: event.target.value
         })
+    },
+
+    deleteFormula(id) {
+        // axios.delete('http://localhost')
+
     },
 
     render() {
@@ -106,7 +147,7 @@ const Editor = React.createClass({
                             id="select_lang"
                             value={this.state.lang}
                             onChange={this.onLangChange}>
-                        <option>c/c++</option>
+                        <option>c</option>
                         <option>pascal</option>
                         <option>fortran</option>
                     </select>
@@ -120,6 +161,7 @@ const Editor = React.createClass({
                 <br/>
                 <br/>
                 <button className="btn btn-default" onClick={this.saveToXml}>Save Formula to Xml</button>
+                <FormulaList formulas={this.state.formulaList}/>
             </div>
         )
     }

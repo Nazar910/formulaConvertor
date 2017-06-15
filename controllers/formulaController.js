@@ -1,11 +1,12 @@
 'use strict';
 const Formula = require('../models/formula');
 const _ = require('lodash');
+const formulaConverter = require('../lib/formulaConverter');
 
 async function create(req, res) {
     const { userId } = req.params;
 
-    const { formula: formulaBody } = req.body;
+    const { formula: formulaBody, lang: language } = req.body;
 
     if (!formulaBody) {
         res.json({
@@ -14,8 +15,27 @@ async function create(req, res) {
         return;
     }
 
-    let data = _.pick(formulaBody, ['body', 'classicView', 'language']);
+    let data = {};
+    data.body = formulaBody;
+    data.language = language;
     data.userId = userId;
+
+    console.log(language);
+
+    switch(language) {
+        case 'pascal': {
+            data.classicView = formulaConverter.translatePascalToClassic(formulaBody);
+            break;
+        }
+        case 'fortran': {
+            data.classicView = formulaConverter.translateFortranToClassic(formulaBody);
+            break;
+        }
+        case 'c': {
+            data.classicView = formulaConverter.translateCtoClassic(formulaBody);
+            break;
+        }
+    }
 
     const formula = new Formula(data);
 
@@ -28,7 +48,7 @@ async function create(req, res) {
 
 async function getAllForUser(req, res) {
     const { userId } = req.params;
-
+    console.log('USER ID', userId);
     const formulas = await Formula.findByUserId(userId);
 
     res.json(formulas);
