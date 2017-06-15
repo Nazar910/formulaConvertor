@@ -4,6 +4,7 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const passport = require('passport');
 const mongoose = require('mongoose');
+const cors = require('cors');
 
 const api = require('./routes');
 
@@ -16,7 +17,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 require('./passport.js')(passport);
 
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(cors({ origin: '*' }));
 
 app.use('/api', api);
 
