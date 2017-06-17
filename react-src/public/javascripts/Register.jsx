@@ -2,7 +2,13 @@
 const React = require('react');
 const axios = require('axios');
 
-const Register = React.createClass({
+class Register extends React.Component {
+    constructor(...args) {
+        super(...args);
+
+        this.onSubmit = this.onSubmit.bind(this);
+    }
+
     onSubmit() {
         axios.post('http://localhost:9000/api/users/', {
             user: {
@@ -15,7 +21,7 @@ const Register = React.createClass({
         }).then( () => {
             window.location = '/';
         });
-    },
+    }
 
     render(){
         return (
@@ -29,6 +35,6 @@ const Register = React.createClass({
             </div>
         )
     }
-});
+}
 
 module.exports = Register;

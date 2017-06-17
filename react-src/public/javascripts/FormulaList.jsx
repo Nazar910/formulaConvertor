@@ -4,14 +4,20 @@ const axios = require('axios');
 
 const Formula = require('./Formula.jsx');
 
-const FormulaList = React.createClass({
+class FormulaList extends React.Component {
+    constructor(...args) {
+        super(...args);
+
+        this.componentWillMount = this.componentWillMount.bind(this);
+    }
+
     componentWillMount() {
         console.log(this.props.formulas);
-    },
+    }
 
     deleteFormula(id) {
         this.props.deleteFormula(id);
-    },
+    }
 
     render(){
         return (
@@ -22,6 +28,6 @@ const FormulaList = React.createClass({
             </div>
         )
     }
-});
+}
 
 module.exports = FormulaList;

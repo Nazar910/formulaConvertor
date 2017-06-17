@@ -2,7 +2,13 @@
 const React = require('react');
 const axios = require('axios');
 
-const Login = React.createClass({
+class Login extends React.Component {
+    constructor(...args) {
+        super(...args);
+
+        this.onSubmit = this.onSubmit.bind(this);
+    }
+
     onSubmit() {
         axios.post('http://localhost:9000/api/users/authenticate', {
             email: this.refs.email.value,
@@ -11,11 +17,11 @@ const Login = React.createClass({
             localStorage.setItem('token', data.token);
             window.location = 'editor';
         });
-    },
+    }
 
     register() {
         window.location = 'register';
-    },
+    }
 
     render(){
         return (
@@ -27,6 +33,6 @@ const Login = React.createClass({
             </div>
         )
     }
-});
+}
 
 module.exports = Login;

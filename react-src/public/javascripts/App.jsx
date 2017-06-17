@@ -6,8 +6,8 @@ const Register = require('./Register.jsx');
 const { BrowserRouter, Switch, Route } = require('react-router-dom');
 
 
-const App = React.createClass({
-    render(){
+class App extends React.Component {
+    render() {
         return (
             <BrowserRouter>
                 <Switch>
@@ -18,6 +18,6 @@ const App = React.createClass({
             </BrowserRouter>
         )
     }
-});
+}
 
 module.exports = App;

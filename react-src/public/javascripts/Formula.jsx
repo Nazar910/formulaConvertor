@@ -4,10 +4,10 @@ const axios = require('axios');
 
 const renderHTML = require('react-render-html');
 
-const Formula = React.createClass({
+class Formula extends React.Component {
     delete() {
         // this.props.deleteFormula(this.props.formula._id);
-    },
+    }
 
     render(){
         return (
@@ -16,6 +16,6 @@ const Formula = React.createClass({
             </div>
         )
     }
-});
+}
 
 module.exports = Formula;

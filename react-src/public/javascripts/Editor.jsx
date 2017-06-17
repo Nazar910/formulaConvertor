@@ -21,9 +21,11 @@ function getUserFormulas(userId) {
     })
 }
 
-const Editor = React.createClass({
-    getInitialState(){
-        return {
+class Editor extends React.Component {
+    constructor(...args) {
+        super(...args);
+
+        this.state = {
             inputFormula: '',
             outputFormula: '',
             error: '',
@@ -31,7 +33,7 @@ const Editor = React.createClass({
             formulaList: [],
             user: {}
         }
-    },
+    }
 
     componentDidMount() {
         const token = localStorage.getItem('token');
@@ -62,16 +64,16 @@ const Editor = React.createClass({
 
         })
 
-    },
+    }
 
     onInputFormulaChange(event){
         let value = event.target.value;
         this.setState({ inputFormula: value });
-    },
+    }
 
     convertToClassicView(value){
         return axios.post('http://localhost:9000/api/formulas/' + this.state.user._id, { formula: value, lang: this.state.lang });
-    },
+    }
     processInputFormula(){
         const input = this.state.inputFormula;
         this.convertToClassicView(input)
@@ -91,7 +93,7 @@ const Editor = React.createClass({
                 //
                 // this.setState(state);
             })
-    },
+    }
     saveToImg() {
         html2canvas($("#output"), {
             onrendered: function(canvas) {
@@ -99,7 +101,7 @@ const Editor = React.createClass({
 
             }
         });
-    },
+    }
     saveToXml(){
         var xmlFile="<?xml version=\"1.0\" encoding=\"UTF-8\"?> <formula>"+this.state.outputFormula+"</formula>";
         var blob = new Blob([xmlFile], {
@@ -107,18 +109,18 @@ const Editor = React.createClass({
         });
 
         saveAs(blob, "RAW.xml");
-    },
+    }
 
     onLangChange(event){
         this.setState({
             lang: event.target.value
         })
-    },
+    }
 
     deleteFormula(id) {
         // axios.delete('http://localhost')
 
-    },
+    }
 
     render() {
         return(
@@ -165,6 +167,6 @@ const Editor = React.createClass({
             </div>
         )
     }
-});
+}
 
 module.exports = Editor;
