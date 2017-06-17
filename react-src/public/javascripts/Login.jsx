@@ -7,6 +7,10 @@ import { Link } from 'react-router-dom';
 class Login extends React.Component {
     constructor(...args) {
         super(...args);
+
+        this.state = {
+            error: ''
+        }
     }
 
     onSubmit() {
@@ -14,6 +18,12 @@ class Login extends React.Component {
             email: this.refs.email.value,
             password: this.refs.password.value
         }).then( ({ data }) => {
+            if (!data.token) {
+                return this.setState({
+                    error: 'Email or Password are incorrect!'
+                })
+            }
+
             this.props.updateToken(data.token);
         });
     }
@@ -21,10 +31,13 @@ class Login extends React.Component {
     render(){
         return (
             <div>
-                <input type="text" ref="email"/><br/>
-                <input type="password" ref="password"/><br/>
-                <button className="btn btn-success" onClick={this.onSubmit.bind(this)}>Submit</button>&nbsp;
-                <Link to='/register'>Sign up</Link>
+                {this.state.error}
+                <div className="form-group">
+                    <input className="form-control" type="text" ref="email" placeholder="Email"/><br/>
+                    <input className="form-control" type="password" ref="password" placeholder="Password"/><br/>
+                    <button className="btn btn-success" onClick={this.onSubmit.bind(this)}>Submit</button>&nbsp;
+                    <Link to='/register'>Sign up</Link>
+                </div>
             </div>
         )
     }
