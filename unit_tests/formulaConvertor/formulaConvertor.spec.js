@@ -1,6 +1,6 @@
 const expect = require('chai').expect;
 
-const formulaConverter = require('../lib/formulaConverter');
+const formulaConverter = require('../../lib/formulaConverter');
 
 const sqrt = '<table style="border-spacing:0px;border-width:0px;'
 + 'font-family:verdana;"><tr><td>&nbsp;</td><td>_______</td></tr>'

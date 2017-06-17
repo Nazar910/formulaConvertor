@@ -3,10 +3,11 @@ const Formula = require('../models/formula');
 const _ = require('lodash');
 const formulaConverter = require('../lib/formulaConverter');
 
+//TODO move all database logic to repositories
 async function create(req, res) {
     const { userId } = req.params;
 
-    const { formula: formulaBody, lang: language } = req.body;
+    const { body: formulaBody, language } = req.body.formula;
 
     if (!formulaBody) {
         res.json({

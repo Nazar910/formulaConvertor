@@ -116,9 +116,9 @@ describe('app', () => {
                     try {
                         const formulaBody = {
                             formula: {
-                                body: 'x^2',
+                                body: 'pow(x,2)',
                                 classicView: 'x<sup>2</sup>',
-                                language: 'pascal'
+                                language: 'c'
                             }
                         };
                         const resp = await axios.post(`http://localhost:3300/api/formulas/${user._id}`, formulaBody);
@@ -138,7 +138,7 @@ describe('app', () => {
 
             });
 
-            describe('with undefined formulaBody', () => {
+            xdescribe('with undefined formulaBody', () => {
 
                 it('should cause an error', async () => {
 
@@ -179,9 +179,9 @@ describe('app', () => {
 
                     const formulaBody = {
                         formula: {
-                            body: 'x^2',
+                            body: 'pow(x,2)',
                             classicView: 'x<sup>2</sup>',
-                            language: Formula.PASCAL
+                            language: 'c'
                         }
                     };
                     await axios.post(`http://localhost:3300/api/formulas/${user._id}`, formulaBody);
@@ -201,9 +201,9 @@ describe('app', () => {
                     const actualData = resp.data.map(formula => _.pick(formula, ['body', 'classicView', 'language']));
 
                     expect(actualData).to.deep.equal([{
-                        body: 'x^2',
+                        body: 'pow(x,2)',
                         classicView: 'x<sup>2</sup>',
-                        language: Formula.PASCAL
+                        language: 'c'
                     }]);
 
                 } catch (e) {
