@@ -4,6 +4,7 @@ const _ = require('lodash');
 const formulaConverter = require('../lib/formulaConverter');
 const serializer = require('../serializers/formula');
 
+//TODO add a try/catch and response with error in one occurred
 async function create(req, res) {
     const { userId } = req.params;
 
