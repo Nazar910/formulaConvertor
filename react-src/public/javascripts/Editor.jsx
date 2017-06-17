@@ -4,10 +4,11 @@ const renderHTML = require('react-render-html');
 
 const FormulaList = require('./FormulaList.jsx');
 
-function getUserFormulas(userId) {
+import _ from 'lodash';
+
+function getUserFormulas(userId, token) {
     console.log('GET USER FORMULAS');
     return new Promise((resolve, reject) => {
-        const token = localStorage.getItem('token');
         axios({
             url: `http://localhost:9000/api/formulas/${userId}`,
             method: 'GET',
@@ -17,7 +18,7 @@ function getUserFormulas(userId) {
         }).then(({data}) => {
             console.log('FORMULAS', data);
             resolve(data);
-        })
+        }).catch(reject);
     })
 }
 
@@ -26,12 +27,11 @@ class Editor extends React.Component {
         super(...args);
 
         this.state = {
-            inputFormula: '',
-            outputFormula: '',
             error: '',
             lang: 'c',
             formulaList: [],
-            user: {}
+            user: {},
+            isUnauthenticated: false
         }
     }
 
@@ -45,60 +45,70 @@ class Editor extends React.Component {
             }
         }).then(({data, statusCode}) => {
             if (statusCode === 403) {
-                window.location = 'login';
-                return;
+                throw new Error('UnAuthorized');
             }
 
             return data.user;
         }).then(user => {
-            console.log(user);
-
-            getUserFormulas(user._id)
+            getUserFormulas(user._id, token)
                 .then(formulas => {
                     console.log(formulas);
                     this.setState({
                         user: user,
-                        formulaList: formulas
-                    });
-                });
+                        formulaList: formulas.data
+                    }, () => console.log(this.state));
+                })
+                .catch(e => {
+                    this.setState({
+                        error: e.message
+                    })
+                })
 
+        }).catch(e => {
+            if (e.message === 'UnAuthorized') {
+                this.setState({
+                    isUnauthenticated: true
+                })
+            }
+
+            console.error(e);
+            this.setState({
+                error: e.message
+            })
         })
 
     }
 
-    onInputFormulaChange(event){
-        let value = event.target.value;
-        this.setState({ inputFormula: value });
+    convertToClassicView(value){
+        const formulaBody = {
+            data: {
+                type: 'formula',
+                attributes: {
+                    body: value,
+                    language: this.state.lang
+                }
+            }
+        };
+
+        return axios.post('http://localhost:9000/api/formulas/' + this.state.user._id, formulaBody);
     }
 
-    convertToClassicView(value){
-        return axios.post('http://localhost:9000/api/formulas/' + this.state.user._id, { formula: value, lang: this.state.lang });
-    }
     processInputFormula(){
-        const input = this.state.inputFormula;
+        const input = this.refs.inputFormula.value;
         this.convertToClassicView(input)
             .then(({ data }) => {
-                // const formula = data.formula;
-                // let state = {
-                //     formulaList: this.state.formulaList.push(formula),
-                //     error: ''
-                // };
-                //
-                // if (formula.error) {
-                //     state = {
-                //         error: formula.error,
-                //         outputFormula: ''
-                //     }
-                // }
-                //
-                // this.setState(state);
+                if (data.error) {
+                    this.setState({
+                        error
+                    })
+                }
             })
     }
-    saveToImg() {
+
+    /*saveToImg() {
         html2canvas($("#output"), {
             onrendered: function(canvas) {
                 document.location.href = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
-
             }
         });
     }
@@ -109,7 +119,7 @@ class Editor extends React.Component {
         });
 
         saveAs(blob, "RAW.xml");
-    }
+    }*/
 
     onLangChange(event){
         this.setState({
@@ -128,19 +138,11 @@ class Editor extends React.Component {
                 <div className="form-group">
                     <label>Formula:</label>
                     <textarea className="form-control"
-                              value={this.state.inputFormula}
                               placeholder="input"
-                              onChange={this.onInputFormulaChange}
+                              ref="inputFormula"
                     >
                     </textarea>
                     {this.state.error}
-                </div>
-
-                <div className="form-group">
-                    <label>Output:</label>
-                    <span id="output">
-                        {renderHTML(this.state.outputFormula)}
-                    </span>
                 </div>
                 <br/>
                 <div className="form-group">
@@ -156,14 +158,17 @@ class Editor extends React.Component {
                 </div>
 
                 <br/>
-                <button className="btn btn-success" onClick={this.processInputFormula}>Process</button>
+                <button className="btn btn-success" onClick={this.processInputFormula.bind(this)}>Process</button>
                 <br/>
                 <br/>
                 <button className="btn btn-default" onClick={this.saveToImg}>Save Formula to Image</button>
                 <br/>
                 <br/>
                 <button className="btn btn-default" onClick={this.saveToXml}>Save Formula to Xml</button>
-                <FormulaList formulas={this.state.formulaList}/>
+
+
+                { !_.isEmpty(this.state.formulaList) ?
+                    <FormulaList formulas={this.state.formulaList}/> : 'Empty'}
             </div>
         )
     }

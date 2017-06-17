@@ -5,6 +5,11 @@ import axios from 'axios';
 import renderHTML from 'react-render-html';
 
 class Formula extends React.Component {
+    constructor(...args) {
+        super(...args);
+
+    }
+
     delete() {
         // this.props.deleteFormula(this.props.formula._id);
     }
