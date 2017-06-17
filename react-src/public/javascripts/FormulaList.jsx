@@ -1,8 +1,8 @@
 'use strict';
-const React = require('react');
-const axios = require('axios');
+import React from 'react';
+import axios from 'axios';
 
-const Formula = require('./Formula.jsx');
+import Formula from './Formula.jsx';
 
 class FormulaList extends React.Component {
     constructor(...args) {

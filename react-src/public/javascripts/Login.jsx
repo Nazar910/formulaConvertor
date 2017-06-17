@@ -1,12 +1,12 @@
 'use strict';
-const React = require('react');
-const axios = require('axios');
+import React from 'react';
+import axios from 'axios';
+
+import { Link } from 'react-router-dom';
 
 class Login extends React.Component {
     constructor(...args) {
         super(...args);
-
-        this.onSubmit = this.onSubmit.bind(this);
     }
 
     onSubmit() {
@@ -14,13 +14,8 @@ class Login extends React.Component {
             email: this.refs.email.value,
             password: this.refs.password.value
         }).then( ({ data }) => {
-            localStorage.setItem('token', data.token);
-            window.location = 'editor';
+            this.props.updateToken(data.token);
         });
-    }
-
-    register() {
-        window.location = 'register';
     }
 
     render(){
@@ -28,8 +23,8 @@ class Login extends React.Component {
             <div>
                 <input type="text" ref="email"/><br/>
                 <input type="password" ref="password"/><br/>
-                <button className="btn btn-success" onClick={this.onSubmit}>Submit</button>&nbsp;
-                <button className="btn btn-success" onClick={this.register}>Sign up</button>
+                <button className="btn btn-success" onClick={this.onSubmit.bind(this)}>Submit</button>&nbsp;
+                <Link to='/register'>Sign up</Link>
             </div>
         )
     }

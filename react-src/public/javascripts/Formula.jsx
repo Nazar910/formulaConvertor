@@ -1,8 +1,8 @@
 'use strict';
-const React = require('react');
-const axios = require('axios');
+import React from 'react';
+import axios from 'axios';
 
-const renderHTML = require('react-render-html');
+import renderHTML from 'react-render-html';
 
 class Formula extends React.Component {
     delete() {
