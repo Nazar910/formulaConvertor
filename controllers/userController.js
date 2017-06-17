@@ -58,8 +58,6 @@ async function authenticateUser(req, res) {
 
     const user = await User.findByEmail(email);
 
-    console.log(user);
-
     if (!user) {
         return res.json({
             error: 'User with such email not found!',
