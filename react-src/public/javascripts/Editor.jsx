@@ -1,6 +1,5 @@
 const React = require('react');
 const axios = require('axios');
-const renderHTML = require('react-render-html');
 
 const FormulaList = require('./FormulaList.jsx');
 
@@ -98,28 +97,19 @@ class Editor extends React.Component {
         this.convertToClassicView(input)
             .then(({ data }) => {
                 if (data.error) {
-                    this.setState({
+                    return this.setState({
                         error
                     })
                 }
+
+                const arr = this.state.formulaList;
+
+                arr.push(data.data);
+                this.setState({
+                    formulaList: arr
+                });
             })
     }
-
-    /*saveToImg() {
-        html2canvas($("#output"), {
-            onrendered: function(canvas) {
-                document.location.href = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
-            }
-        });
-    }
-    saveToXml(){
-        var xmlFile="<?xml version=\"1.0\" encoding=\"UTF-8\"?> <formula>"+this.state.outputFormula+"</formula>";
-        var blob = new Blob([xmlFile], {
-            type: "text/plain;charset=utf-8"
-        });
-
-        saveAs(blob, "RAW.xml");
-    }*/
 
     onLangChange(event){
         this.setState({
@@ -159,12 +149,6 @@ class Editor extends React.Component {
 
                 <br/>
                 <button className="btn btn-success" onClick={this.processInputFormula.bind(this)}>Process</button>
-                <br/>
-                <br/>
-                <button className="btn btn-default" onClick={this.saveToImg}>Save Formula to Image</button>
-                <br/>
-                <br/>
-                <button className="btn btn-default" onClick={this.saveToXml}>Save Formula to Xml</button>
 
 
                 { !_.isEmpty(this.state.formulaList) ?
