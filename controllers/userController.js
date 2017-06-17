@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken');
 
 const serializer = require('../serializers/user');
 
+//TODO add a try/catch and response with error in one occurred
 async function createUser(req, res) {
     const { data: userBody } = req.body;
 
