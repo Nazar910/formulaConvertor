@@ -3,18 +3,14 @@
 const User = require('../models/user');
 const Formula = require('../models/formula');
 
-async function ensureUser(userBody) {
+function ensureUser(userBody) {
     const user = new User(userBody);
-    await user.save();
-
-    return user;
+    return user.save();
 }
 
-async function ensureFormula(formulaBody) {
+function ensureFormula(formulaBody) {
     const formula = new Formula(formulaBody);
-    await formula.save();
-
-    return formula;
+    return formula.save();
 }
 
 module.exports = {
