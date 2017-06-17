@@ -3,28 +3,33 @@ const User = require('../models/user');
 const _ = require('lodash');
 const jwt = require('jsonwebtoken');
 
+const serializer = require('../serializers/user');
+
 async function createUser(req, res) {
-    const { user: userBody } = req.body;
+    const { data: userBody } = req.body;
 
     if (!userBody) {
-        res.json({
+        return res.json({
             error: ['Userbody is undefined!']
         });
-        return;
     }
 
-    const user = new User(
-      _.pick(userBody, ['email', 'name', 'lastName', 'password', 'company']));
+    const user = new User(userBody.attributes);
 
     await user.hashPassword();
-
     await user.save();
 
-    res.json(user);
+    const result = {
+        data: serializer.serializeData(user)
+    };
+
+    res.json(result);
 }
 
 async function updateUser(req, res) {
-    const { user: userBody, userId } = req.body;
+    const { user: userBody } = req.body;
+
+    const userId = req.params.userId;
 
     const user = await User.findById(userId);
 
@@ -34,6 +39,8 @@ async function updateUser(req, res) {
     _.mapKeys(userProperties, (value, key) => user[key] = value);
 
     await user.save();
+
+    res.json(serializer.serializeData(user));
 }
 
 async function deleteUser({ email }) {
@@ -50,8 +57,6 @@ async function authenticateUser(req, res) {
     const { email, password } = req.body;
 
     const user = await User.findByEmail(email);
-
-    console.log(user);
 
     if (!user) {
         return res.json({

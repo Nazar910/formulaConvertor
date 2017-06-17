@@ -2,56 +2,43 @@
 const Formula = require('../models/formula');
 const _ = require('lodash');
 const formulaConverter = require('../lib/formulaConverter');
+const serializer = require('../serializers/formula');
 
 async function create(req, res) {
     const { userId } = req.params;
 
-    const { formula: formulaBody, lang: language } = req.body;
+    const { data: formulaBody } = req.body;
 
     if (!formulaBody) {
-        res.json({
+        return res.json({
             error: ['FormulasBody is undefined!']
         });
-        return;
     }
 
-    let data = {};
-    data.body = formulaBody;
-    data.language = language;
+    const data = formulaBody.attributes;
+    data.classicView = formulaConverter[data.language](data.body);
     data.userId = userId;
 
-    console.log(language);
-
-    switch(language) {
-        case 'pascal': {
-            data.classicView = formulaConverter.translatePascalToClassic(formulaBody);
-            break;
-        }
-        case 'fortran': {
-            data.classicView = formulaConverter.translateFortranToClassic(formulaBody);
-            break;
-        }
-        case 'c': {
-            data.classicView = formulaConverter.translateCtoClassic(formulaBody);
-            break;
-        }
-    }
-
     const formula = new Formula(data);
+    await formula.save();
 
-    const result = await formula.save();
+    const result = {
+        data: serializer.serializeData(formula)
+    };
 
-    res.json({
-        formula: result
-    })
+    res.json(result);
 }
 
 async function getAllForUser(req, res) {
     const { userId } = req.params;
-    console.log('USER ID', userId);
+
     const formulas = await Formula.findByUserId(userId);
 
-    res.json(formulas);
+    const result = {
+        data: serializer.serializeMany(formulas)
+    };
+
+    res.json(result);
 }
 
 module.exports.create = create;
