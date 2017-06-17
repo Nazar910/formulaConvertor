@@ -6,6 +6,7 @@ const Schema = mongoose.Schema;
 
 const bcrypt = require('bcryptjs');
 
+//TODO make email unique
 const userSchema = new Schema({
     name: String,
     lastName: String,
