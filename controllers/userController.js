@@ -19,7 +19,11 @@ async function createUser(req, res) {
     await user.hashPassword();
     await user.save();
 
-    res.json(serializer.serializeData(user));
+    const result = {
+        data: serializer.serializeData(user)
+    };
+
+    res.json(result);
 }
 
 async function updateUser(req, res) {

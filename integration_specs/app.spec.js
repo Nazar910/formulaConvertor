@@ -87,8 +87,6 @@ describe('app', () => {
 
     describe('formulas', () => {
 
-        const Formula = require('../models/formula');
-
         let user;
         beforeEach(async () => {
 

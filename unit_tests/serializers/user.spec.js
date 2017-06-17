@@ -23,11 +23,9 @@ describe('userSerializer', () => {
         const actual = serializer.serializeData(userBody);
 
         expect(actual).to.deep.equal({
-            data: {
-                id: _id,
-                type: 'user',
-                attributes: _.omit(userBody, ['password'])
-            }
+            id: _id,
+            type: 'user',
+            attributes: _.omit(userBody, ['password'])
         });
     })
 

@@ -6,11 +6,9 @@ function serializeUser(userBody) {
     const attributes = _.pick(userBody, props);
 
     return {
-        data: {
-            type: 'user',
-            id: userBody._id,
-            attributes
-        }
+        type: 'user',
+        id: userBody._id,
+        attributes
     }
 }
 
