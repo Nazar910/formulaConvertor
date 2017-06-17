@@ -10,7 +10,7 @@ describe('userSerializer', () => {
 
     it('should serialize userBody to json api format', () => {
 
-        const _id = mongoose.Types.ObjectId;
+        const _id = mongoose.Types.ObjectId();
         const userBody = {
             _id,
             name: 'John',
@@ -26,7 +26,7 @@ describe('userSerializer', () => {
             data: {
                 id: _id,
                 type: 'user',
-                attributes: _.omit(userBody, ['password', '_id'])
+                attributes: _.omit(userBody, ['password'])
             }
         });
     })
