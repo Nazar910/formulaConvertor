@@ -133,23 +133,20 @@ class Editor extends React.Component {
                     >
                     </textarea>
                     {this.state.error}
+                    <div>
+                        <label>Select language:</label><br/>
+                        <select className="form-control"
+                                id="select_lang"
+                                value={this.state.lang}
+                                onChange={this.onLangChange}>
+                            <option>c</option>
+                            <option>pascal</option>
+                            <option>fortran</option>
+                        </select>
+                        <button className="btn btn-success" id="convert" onClick={this.processInputFormula.bind(this)}>Process</button>
+                    </div>
                 </div>
-                <br/>
-                <div className="form-group">
-                    <label>Select language:</label>
-                    <select className="form-control"
-                            id="select_lang"
-                            value={this.state.lang}
-                            onChange={this.onLangChange}>
-                        <option>c</option>
-                        <option>pascal</option>
-                        <option>fortran</option>
-                    </select>
-                </div>
-
-                <br/>
-                <button className="btn btn-success" onClick={this.processInputFormula.bind(this)}>Process</button>
-
+                <br/><br/>
 
                 { !_.isEmpty(this.state.formulaList) ?
                     <FormulaList formulas={this.state.formulaList}/> : 'Empty'}

@@ -11,7 +11,7 @@ class Formula extends React.Component {
     }
 
     saveToImg() {
-        html2canvas($("#output"), {
+        html2canvas($("#formula"), {
             onrendered: function(canvas) {
                 document.location.href = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
             }
@@ -33,9 +33,10 @@ class Formula extends React.Component {
     render(){
         return (
             <div>
-                <p>{renderHTML(this.props.formula.classicView)}</p>
-                <button className="btn btn-default" onClick={this.saveToXml.bind(null, this.props.formula.classicView)}>Save Formula to Xml</button>
-                <button className="btn btn-default" onClick={this.saveToImg}>Save Formula to Image</button>
+                <span id="formula">{renderHTML(this.props.formula.classicView)}</span>
+                <button className="btn btn-default" onClick={this.saveToXml.bind(null, this.props.formula.classicView)}>Save to Xml</button>
+                <button className="btn btn-default" onClick={this.saveToImg}>Save to Image</button>
+                <button className="btn btn-default" onClick={this.deleteFormula}>Delete</button>
             </div>
         )
     }
