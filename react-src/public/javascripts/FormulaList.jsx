@@ -9,6 +9,7 @@ class FormulaList extends React.Component {
     constructor(...args) {
         super(...args);
 
+        this.deleteFormula = this.deleteFormula.bind(this);
     }
 
     deleteFormula(id) {
@@ -19,7 +20,12 @@ class FormulaList extends React.Component {
         return (
             <div>
                 {
-                    this.props.formulas.map(elem => <Formula key={elem.id} formula={elem.attributes}/>)
+                    this.props.formulas.map(elem =>
+                        <Formula
+                            key={elem.id}
+                            formula={elem.attributes}
+                            deleteFormula={this.deleteFormula}
+                        />)
                 }
             </div>
         )

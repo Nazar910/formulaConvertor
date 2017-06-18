@@ -118,8 +118,8 @@ class Editor extends React.Component {
     }
 
     deleteFormula(id) {
-        // axios.delete('http://localhost')
-
+        console.log(`Deleting formula with id=${id}`)
+        // axios.delete('http://localhost:9000/api/formulas/' + id).then()
     }
 
     render() {
@@ -148,8 +148,10 @@ class Editor extends React.Component {
                 </div>
                 <br/><br/>
 
-                { !_.isEmpty(this.state.formulaList) ?
-                    <FormulaList formulas={this.state.formulaList}/> : 'Empty'}
+                <FormulaList
+                    formulas={this.state.formulaList}
+                    deleteFormula={this.deleteFormula}
+                />
             </div>
         )
     }

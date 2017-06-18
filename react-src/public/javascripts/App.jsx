@@ -11,7 +11,7 @@ class App extends React.Component {
         super(...args);
 
         this.state = {
-            token: '',
+            token: localStorage.getItem('token'),
             registered: false
         }
     }
@@ -37,7 +37,10 @@ class App extends React.Component {
                         this.state.token ?
                             <Redirect to="/editor"/> :
                             <Login updateToken={this.updateToken.bind(this)}/>}/>
-                    <Route path="/editor" render={() => <Editor token={this.state.token}/>}/>
+                    <Route path="/editor" render={() =>
+                        this.state.token ?
+                            <Editor token={this.state.token}/> :
+                            <Redirect to="/"/>}/>
                     <Route path="/register" render={() =>
                         this.state.registered ?
                             <Redirect to="/"/> :
