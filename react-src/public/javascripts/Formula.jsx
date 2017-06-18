@@ -1,21 +1,44 @@
 'use strict';
-const React = require('react');
-const axios = require('axios');
+import React from 'react';
 
-const renderHTML = require('react-render-html');
+import renderHTML from 'react-render-html';
 
-const Formula = React.createClass({
-    delete() {
-        // this.props.deleteFormula(this.props.formula._id);
-    },
+class Formula extends React.Component {
+    constructor(...args) {
+        super(...args);
+
+    }
+
+    saveToImg() {
+        html2canvas($("#formula"), {
+            onrendered: function(canvas) {
+                document.location.href = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+            }
+        });
+    }
+    saveToXml(value){
+        var xmlFile="<?xml version=\"1.0\" encoding=\"UTF-8\"?> <formula>"+ value +"</formula>";
+        var blob = new Blob([xmlFile], {
+            type: "text/plain;charset=utf-8"
+        });
+
+        saveAs(blob, "RAW.xml");
+    }
+
+    deleteFormula() {
+        this.props.deleteFormula(this.props.formula._id);
+    }
 
     render(){
         return (
             <div>
-                <p>{renderHTML(this.props.formula.classicView)}</p>
+                <span id="formula">{renderHTML(this.props.formula.classicView)}</span>
+                <button className="btn btn-default" onClick={this.saveToXml.bind(null, this.props.formula.classicView)}>Save to Xml</button>
+                <button className="btn btn-default" onClick={this.saveToImg}>Save to Image</button>
+                <button className="btn btn-default" onClick={this.deleteFormula.bind(this)}>Delete</button>
             </div>
         )
     }
-});
+}
 
 module.exports = Formula;

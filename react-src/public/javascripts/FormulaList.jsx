@@ -1,27 +1,35 @@
 'use strict';
-const React = require('react');
-const axios = require('axios');
+import React from 'react';
+import axios from 'axios';
 
-const Formula = require('./Formula.jsx');
+import Formula from './Formula.jsx';
 
-const FormulaList = React.createClass({
-    componentWillMount() {
-        console.log(this.props.formulas);
-    },
+
+class FormulaList extends React.Component {
+    constructor(...args) {
+        super(...args);
+
+        this.deleteFormula = this.deleteFormula.bind(this);
+    }
 
     deleteFormula(id) {
         this.props.deleteFormula(id);
-    },
+    }
 
     render(){
         return (
             <div>
                 {
-                    this.props.formulas.map(elem => <Formula key={elem._id} formula={elem}/>)
+                    this.props.formulas.map(elem =>
+                        <Formula
+                            key={elem.id}
+                            formula={elem.attributes}
+                            deleteFormula={this.deleteFormula}
+                        />)
                 }
             </div>
         )
     }
-});
+}
 
 module.exports = FormulaList;

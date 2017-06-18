@@ -1,34 +1,43 @@
 'use strict';
-const React = require('react');
-const axios = require('axios');
+import React from 'react';
+import axios from 'axios';
 
-const Register = React.createClass({
+class Register extends React.Component {
+    constructor(...args) {
+        super(...args);
+    }
+
     onSubmit() {
         axios.post('http://localhost:9000/api/users/', {
-            user: {
-                name: this.refs.name.value,
-                lastName: this.refs.lastName.value,
-                company: this.refs.company.value,
-                email: this.refs.email.value,
-                password: this.refs.password.value
+            data: {
+                type: 'user',
+                attributes: {
+                    name: this.refs.name.value,
+                    lastName: this.refs.lastName.value,
+                    company: this.refs.company.value,
+                    email: this.refs.email.value,
+                    password: this.refs.password.value
+                }
             }
         }).then( () => {
-            window.location = '/';
+            this.props.registered();
         });
-    },
+    }
 
     render(){
         return (
             <div>
-                <input type="text" ref="name"/><br/>
-                <input type="text" ref="lastName"/><br/>
-                <input type="text" ref="email"/><br/>
-                <input type="text" ref="company"/><br/>
-                <input type="password" ref="password"/><br/>
-                <button className="btn btn-success" onClick={this.onSubmit}>Submit</button>&nbsp;
+                <div className="form-group">
+                    <input className="form-control" type="text" ref="name" placeholder="Name"/><br/>
+                    <input className="form-control" type="text" ref="lastName" placeholder="Last name"/><br/>
+                    <input className="form-control" type="text" ref="email" placeholder="Email"/><br/>
+                    <input className="form-control" type="text" ref="company" placeholder="Company name"/><br/>
+                    <input className="form-control" type="password" ref="password" placeholder="Password"/><br/>
+                    <button className="btn btn-success" onClick={this.onSubmit.bind(this)}>Submit</button>&nbsp;
+                </div>
             </div>
         )
     }
-});
+}
 
 module.exports = Register;

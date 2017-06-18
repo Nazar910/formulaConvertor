@@ -1,13 +1,11 @@
-const React = require('react');
-const axios = require('axios');
-const renderHTML = require('react-render-html');
+import React from 'react';
+import axios from 'axios';
 
-const FormulaList = require('./FormulaList.jsx');
+import FormulaList from './FormulaList.jsx';
 
-function getUserFormulas(userId) {
+function getUserFormulas(userId, token) {
     console.log('GET USER FORMULAS');
     return new Promise((resolve, reject) => {
-        const token = localStorage.getItem('token');
         axios({
             url: `http://localhost:9000/api/formulas/${userId}`,
             method: 'GET',
@@ -17,21 +15,21 @@ function getUserFormulas(userId) {
         }).then(({data}) => {
             console.log('FORMULAS', data);
             resolve(data);
-        })
+        }).catch(reject);
     })
 }
 
-const Editor = React.createClass({
-    getInitialState(){
-        return {
-            inputFormula: '',
-            outputFormula: '',
+class Editor extends React.Component {
+    constructor(...args) {
+        super(...args);
+
+        this.state = {
             error: '',
             lang: 'c',
             formulaList: [],
-            user: {}
+            isUnauthenticated: false
         }
-    },
+    }
 
     componentDidMount() {
         const token = localStorage.getItem('token');
@@ -43,82 +41,82 @@ const Editor = React.createClass({
             }
         }).then(({data, statusCode}) => {
             if (statusCode === 403) {
-                window.location = 'login';
-                return;
+                throw new Error('UnAuthorized');
             }
 
             return data.user;
         }).then(user => {
-            console.log(user);
-
-            getUserFormulas(user._id)
+            getUserFormulas(user._id, token)
                 .then(formulas => {
                     console.log(formulas);
                     this.setState({
-                        user: user,
-                        formulaList: formulas
-                    });
-                });
+                        formulaList: formulas.data
+                    }, () => console.log(this.state));
+                })
+                .catch(e => {
+                    this.setState({
+                        error: e.message
+                    })
+                })
 
+        }).catch(e => {
+            if (e.message === 'UnAuthorized') {
+                this.setState({
+                    isUnauthenticated: true
+                })
+            }
+
+            console.error(e);
+            this.setState({
+                error: e.message
+            })
         })
 
-    },
-
-    onInputFormulaChange(event){
-        let value = event.target.value;
-        this.setState({ inputFormula: value });
-    },
+    }
 
     convertToClassicView(value){
-        return axios.post('http://localhost:9000/api/formulas/' + this.state.user._id, { formula: value, lang: this.state.lang });
-    },
+        const formulaBody = {
+            data: {
+                type: 'formula',
+                attributes: {
+                    body: value,
+                    language: this.state.lang
+                }
+            }
+        };
+
+        return axios.post('http://localhost:9000/api/formulas/' + this.state.user._id, formulaBody);
+    }
+
     processInputFormula(){
-        const input = this.state.inputFormula;
+        const input = this.refs.inputFormula.value;
         this.convertToClassicView(input)
             .then(({ data }) => {
-                // const formula = data.formula;
-                // let state = {
-                //     formulaList: this.state.formulaList.push(formula),
-                //     error: ''
-                // };
-                //
-                // if (formula.error) {
-                //     state = {
-                //         error: formula.error,
-                //         outputFormula: ''
-                //     }
-                // }
-                //
-                // this.setState(state);
+                if (data.error) {
+                    return this.setState({
+                        error
+                    })
+                }
+
+                const arr = this.state.formulaList;
+
+                arr.push(data.data);
+                this.setState({
+                    formulaList: arr
+                });
             })
-    },
-    saveToImg() {
-        html2canvas($("#output"), {
-            onrendered: function(canvas) {
-                document.location.href = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
-
-            }
-        });
-    },
-    saveToXml(){
-        var xmlFile="<?xml version=\"1.0\" encoding=\"UTF-8\"?> <formula>"+this.state.outputFormula+"</formula>";
-        var blob = new Blob([xmlFile], {
-            type: "text/plain;charset=utf-8"
-        });
-
-        saveAs(blob, "RAW.xml");
-    },
+    }
 
     onLangChange(event){
         this.setState({
             lang: event.target.value
         })
-    },
+    }
 
     deleteFormula(id) {
-        // axios.delete('http://localhost')
-
-    },
+        console.log(`Deleting formula with id=${id}`)
+        // axios.delete('http://localhost:9000/api/formulas/' + id).then()
+    }
 
     render() {
         return(
@@ -126,45 +124,33 @@ const Editor = React.createClass({
                 <div className="form-group">
                     <label>Formula:</label>
                     <textarea className="form-control"
-                              value={this.state.inputFormula}
                               placeholder="input"
-                              onChange={this.onInputFormulaChange}
+                              ref="inputFormula"
                     >
                     </textarea>
                     {this.state.error}
+                    <div>
+                        <label>Select language:</label><br/>
+                        <select className="form-control"
+                                id="select_lang"
+                                value={this.state.lang}
+                                onChange={this.onLangChange}>
+                            <option>c</option>
+                            <option>pascal</option>
+                            <option>fortran</option>
+                        </select>
+                        <button className="btn btn-success" id="convert" onClick={this.processInputFormula.bind(this)}>Process</button>
+                    </div>
                 </div>
+                <br/><br/>
 
-                <div className="form-group">
-                    <label>Output:</label>
-                    <span id="output">
-                        {renderHTML(this.state.outputFormula)}
-                    </span>
-                </div>
-                <br/>
-                <div className="form-group">
-                    <label>Select language:</label>
-                    <select className="form-control"
-                            id="select_lang"
-                            value={this.state.lang}
-                            onChange={this.onLangChange}>
-                        <option>c</option>
-                        <option>pascal</option>
-                        <option>fortran</option>
-                    </select>
-                </div>
-
-                <br/>
-                <button className="btn btn-success" onClick={this.processInputFormula}>Process</button>
-                <br/>
-                <br/>
-                <button className="btn btn-default" onClick={this.saveToImg}>Save Formula to Image</button>
-                <br/>
-                <br/>
-                <button className="btn btn-default" onClick={this.saveToXml}>Save Formula to Xml</button>
-                <FormulaList formulas={this.state.formulaList}/>
+                <FormulaList
+                    formulas={this.state.formulaList}
+                    deleteFormula={this.deleteFormula}
+                />
             </div>
         )
     }
-});
+}
 
 module.exports = Editor;

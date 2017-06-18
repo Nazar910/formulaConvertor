@@ -1,32 +1,46 @@
 'use strict';
-const React = require('react');
-const axios = require('axios');
+import React from 'react';
+import axios from 'axios';
 
-const Login = React.createClass({
+import { Link } from 'react-router-dom';
+
+class Login extends React.Component {
+    constructor(...args) {
+        super(...args);
+
+        this.state = {
+            error: ''
+        }
+    }
+
     onSubmit() {
         axios.post('http://localhost:9000/api/users/authenticate', {
             email: this.refs.email.value,
             password: this.refs.password.value
         }).then( ({ data }) => {
-            localStorage.setItem('token', data.token);
-            window.location = 'editor';
-        });
-    },
+            if (!data.token) {
+                return this.setState({
+                    error: 'Email or Password are incorrect!'
+                })
+            }
 
-    register() {
-        window.location = 'register';
-    },
+            this.props.updateToken(data.token);
+        });
+    }
 
     render(){
         return (
             <div>
-                <input type="text" ref="email"/><br/>
-                <input type="password" ref="password"/><br/>
-                <button className="btn btn-success" onClick={this.onSubmit}>Submit</button>&nbsp;
-                <button className="btn btn-success" onClick={this.register}>Sign up</button>
+                {this.state.error}
+                <div className="form-group">
+                    <input className="form-control" type="text" ref="email" placeholder="Email"/><br/>
+                    <input className="form-control" type="password" ref="password" placeholder="Password"/><br/>
+                    <button className="btn btn-success" onClick={this.onSubmit.bind(this)}>Submit</button>&nbsp;
+                    <Link to='/register'>Sign up</Link>
+                </div>
             </div>
         )
     }
-});
+}
 
 module.exports = Login;
