@@ -8,12 +8,15 @@ class FormulaList extends React.Component {
     constructor(...args) {
         super(...args);
 
-        this.deleteFormula = this.deleteFormula.bind(this);
     }
 
     deleteFormula(...args) {
         console.log(args);
         this.props.deleteFormula(...args);
+    }
+
+    updateFormula(...args) {
+        this.props.updateFormula(...args);
     }
 
     render(){
@@ -25,7 +28,8 @@ class FormulaList extends React.Component {
                             key={elem.id}
                             index={index}
                             formula={elem.attributes}
-                            deleteFormula={this.deleteFormula}
+                            deleteFormula={this.deleteFormula.bind(this)}
+                            updateFormula={this.updateFormula.bind(this)}
                         />)
                 }
             </div>
