@@ -27,12 +27,13 @@ class Editor extends React.Component {
             error: '',
             lang: 'c',
             formulaList: [],
+            user: {},
             isUnauthenticated: false
         }
     }
 
     componentDidMount() {
-        const token = localStorage.getItem('token');
+        const { token } = this.props;
         axios({
             url: 'http://localhost:9000/api/users/profile',
             method: 'GET',
@@ -50,6 +51,7 @@ class Editor extends React.Component {
                 .then(formulas => {
                     console.log(formulas);
                     this.setState({
+                        user,
                         formulaList: formulas.data
                     }, () => console.log(this.state));
                 })
@@ -88,7 +90,7 @@ class Editor extends React.Component {
         return axios.post('http://localhost:9000/api/formulas/' + this.state.user._id, formulaBody);
     }
 
-    processInputFormula(){
+    processInputFormula() {
         const input = this.refs.inputFormula.value;
         this.convertToClassicView(input)
             .then(({ data }) => {
@@ -100,28 +102,43 @@ class Editor extends React.Component {
 
                 const arr = this.state.formulaList;
 
-                arr.push(data.data);
+                arr.unshift(data.data);
                 this.setState({
                     formulaList: arr
                 });
             })
     }
 
-    onLangChange(event){
+    onLangChange(event) {
         this.setState({
             lang: event.target.value
         })
     }
 
-    deleteFormula(id) {
-        console.log(`Deleting formula with id=${id}`)
-        // axios.delete('http://localhost:9000/api/formulas/' + id).then()
+    deleteFormula(index, id) {
+        axios.delete('http://localhost:9000/api/formulas/' + id)
+            .then(({data}) => {
+                if (data.deleted === true) {
+                    const formulaList = this.state.formulaList;
+                    formulaList.splice(index, 1);
+                    console.log(formulaList);
+                    this.setState({
+                        formulaList
+                    })
+                }
+            })
+    }
+
+    logout() {
+        this.props.logout();
     }
 
     render() {
         return(
             <div>
+                <button className="btn btn-success" id="log-out" onClick={this.logout.bind(this)}>Log out</button>
                 <div className="form-group">
+                    <br/>
                     <label>Formula:</label>
                     <textarea className="form-control"
                               placeholder="input"
@@ -146,7 +163,7 @@ class Editor extends React.Component {
 
                 <FormulaList
                     formulas={this.state.formulaList}
-                    deleteFormula={this.deleteFormula}
+                    deleteFormula={this.deleteFormula.bind(this)}
                 />
             </div>
         )

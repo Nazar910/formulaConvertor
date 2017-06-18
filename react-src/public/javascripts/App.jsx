@@ -39,7 +39,7 @@ class App extends React.Component {
                             <Login updateToken={this.updateToken.bind(this)}/>}/>
                     <Route path="/editor" render={() =>
                         this.state.token ?
-                            <Editor token={this.state.token}/> :
+                            <Editor token={this.state.token} logout={() => this.updateToken('')}/> :
                             <Redirect to="/"/>}/>
                     <Route path="/register" render={() =>
                         this.state.registered ?

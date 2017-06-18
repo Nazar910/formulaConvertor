@@ -1,6 +1,5 @@
 'use strict';
 import React from 'react';
-import axios from 'axios';
 
 import Formula from './Formula.jsx';
 
@@ -12,17 +11,19 @@ class FormulaList extends React.Component {
         this.deleteFormula = this.deleteFormula.bind(this);
     }
 
-    deleteFormula(id) {
-        this.props.deleteFormula(id);
+    deleteFormula(...args) {
+        console.log(args);
+        this.props.deleteFormula(...args);
     }
 
     render(){
         return (
             <div>
                 {
-                    this.props.formulas.map(elem =>
+                    this.props.formulas.map((elem, index) =>
                         <Formula
                             key={elem.id}
+                            index={index}
                             formula={elem.attributes}
                             deleteFormula={this.deleteFormula}
                         />)

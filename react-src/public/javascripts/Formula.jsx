@@ -26,7 +26,7 @@ class Formula extends React.Component {
     }
 
     deleteFormula() {
-        this.props.deleteFormula(this.props.formula._id);
+        this.props.deleteFormula(this.props.index, this.props.formula._id);
     }
 
     render(){
