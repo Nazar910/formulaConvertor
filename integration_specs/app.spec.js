@@ -88,13 +88,13 @@ describe('app', () => {
     describe('formulas', () => {
 
         let user;
-        beforeEach(async () => {
+        before(async () => {
 
             try {
                 const userBody = {
                     name: 'Name',
                     lastName: 'lastName',
-                    email: 'email@example.com',
+                    email: 'email1@example.com',
                     password: 'qwerty',
                     company: 'some'
                 };
@@ -217,10 +217,21 @@ describe('app', () => {
 
         describe('getAllForUser', () => {
 
+            let user;
             let formulas;
             beforeEach(async () => {
 
                 try {
+
+                    const userBody = {
+                        name: 'Name',
+                        lastName: 'lastName',
+                        email: 'email2@example.com',
+                        password: 'qwerty',
+                        company: 'some'
+                    };
+
+                    user = await helpers.ensureUser(userBody);
 
                     const formulaBody1 = {
                         body: 'pow(x,2)',
