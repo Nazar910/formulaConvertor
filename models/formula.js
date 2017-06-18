@@ -13,9 +13,15 @@ const formulaSchema = new Schema({
 
 Object.assign(formulaSchema.statics, {
 
+    findById(_id) {
+        return this.findOne({_id});
+    },
+
     findByUserId(userId) {
       return this.find({
         userId
+      }).sort({
+          updatedAt: -1
       });
     }
 });

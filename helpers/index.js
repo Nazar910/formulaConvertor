@@ -13,7 +13,12 @@ function ensureFormula(formulaBody) {
     return formula.save();
 }
 
+function findFormula(_id) {
+    return Formula.findById(_id);
+}
+
 module.exports = {
     ensureUser,
-    ensureFormula
+    ensureFormula,
+    findFormula
 };
