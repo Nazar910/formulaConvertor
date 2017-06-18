@@ -35,6 +35,32 @@ async function create(req, res) {
     }
 }
 
+async function update(req, res) {
+    try {
+        const { formulaId: id } = req.params;
+
+        const { body } = req.body;
+
+        const formula = await Formula.findById(id);
+
+        formula.body = body;
+        formula.classicView = formulaConverter[formula.language](body);
+
+        await formula.save();
+
+        const result = {
+            data: serializer.serializeData(formula)
+        };
+
+        res.json(result);
+
+    } catch (e) {
+        res.json({
+            error: [e.message]
+        })
+    }
+}
+
 async function remove(req, res) {
     try {
         const { formulaId: id } = req.params;
@@ -74,3 +100,4 @@ async function getAllForUser(req, res) {
 module.exports.create = create;
 module.exports.getAllForUser = getAllForUser;
 module.exports.deleteFormula = remove;
+module.exports.updateFormula = update;
