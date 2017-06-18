@@ -10,7 +10,10 @@ const bcrypt = require('bcryptjs');
 const userSchema = new Schema({
     name: String,
     lastName: String,
-    email: String,
+    email: {
+        type: String,
+        unique: true
+    },
     password: String,
     company: String
 });
