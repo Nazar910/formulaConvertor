@@ -1,9 +1,7 @@
-const React = require('react');
-const axios = require('axios');
+import React from 'react';
+import axios from 'axios';
 
-const FormulaList = require('./FormulaList.jsx');
-
-import _ from 'lodash';
+import FormulaList from './FormulaList.jsx';
 
 function getUserFormulas(userId, token) {
     console.log('GET USER FORMULAS');
@@ -29,7 +27,6 @@ class Editor extends React.Component {
             error: '',
             lang: 'c',
             formulaList: [],
-            user: {},
             isUnauthenticated: false
         }
     }
@@ -53,7 +50,6 @@ class Editor extends React.Component {
                 .then(formulas => {
                     console.log(formulas);
                     this.setState({
-                        user: user,
                         formulaList: formulas.data
                     }, () => console.log(this.state));
                 })
