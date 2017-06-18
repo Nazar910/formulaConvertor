@@ -168,23 +168,59 @@ describe('app', () => {
             });
 
         });
+        describe('delete', () => {
+
+            describe('by id', () => {
+
+                let formula;
+                beforeEach(async () => {
+
+                    const formulaBody = {
+                        body: 'pow(x,2)',
+                        classicView: 'x<sup>2</sup>',
+                        language: 'c',
+                        userId: user._id
+                    };
+
+                    formula = await helpers.ensureFormula(formulaBody);
+
+                });
+
+                it('should delete a formula', async () => {
+
+                    try {
+
+                        const formulaId = formula._id.toString();
+                        const resp = await axios.delete(`http://localhost:3300/api/formulas/${formulaId}`);
+
+                        const { data } = resp;
+
+                        expect(data).to.deep.equal({
+                            deleted: true
+                        });
+
+                        const deletedFormula = await helpers.findFormula(formulaId);
+
+                        expect(deletedFormula).to.be.null;
+
+                    } catch (e) {
+                        console.error(e);
+                        throw e;
+                    }
+
+                });
+
+            });
+
+        });
+
 
         describe('getAllForUser', () => {
 
-            let user;
             let formulas;
             beforeEach(async () => {
 
                 try {
-                    const userBody = {
-                        name: 'Name',
-                        lastName: 'lastName',
-                        email: 'email@example.com',
-                        password: 'qwerty',
-                        company: 'some'
-                    };
-
-                    user = await helpers.ensureUser(userBody);
 
                     const formulaBody1 = {
                         body: 'pow(x,2)',
@@ -220,18 +256,6 @@ describe('app', () => {
                     expect(responseData).to.deep.equal({
 
                         data: [
-
-                            {
-                                type: 'formula',
-                                id: formulas[0]._id.toString(),
-                                attributes: {
-                                    body: 'pow(x,2)',
-                                    classicView: 'x<sup>2</sup>',
-                                    language: 'c',
-                                    userId: user._id.toString(),
-                                    _id: formulas[0]._id.toString(),
-                                }
-                            },
                             {
                                 type: 'formula',
                                 id: formulas[1]._id.toString(),
@@ -241,6 +265,17 @@ describe('app', () => {
                                     language: 'pascal',
                                     userId: user._id.toString(),
                                     _id: formulas[1]._id.toString(),
+                                }
+                            },
+                            {
+                                type: 'formula',
+                                id: formulas[0]._id.toString(),
+                                attributes: {
+                                    body: 'pow(x,2)',
+                                    classicView: 'x<sup>2</sup>',
+                                    language: 'c',
+                                    userId: user._id.toString(),
+                                    _id: formulas[0]._id.toString(),
                                 }
                             }
                         ]
