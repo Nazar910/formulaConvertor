@@ -7,6 +7,9 @@ class Formula extends React.Component {
     constructor(...args) {
         super(...args);
 
+        this.state = {
+            edit: false
+        }
     }
 
     saveToImg() {
@@ -29,13 +32,31 @@ class Formula extends React.Component {
         this.props.deleteFormula(this.props.index, this.props.formula._id);
     }
 
+    saveFormula() {
+        this.props.updateFormula(this.props.formula._id, this.refs.edit_formula.value, this.props.index);
+        this.setState({edit: false});
+    }
+
     render(){
         return (
             <div>
-                <span id="formula">{renderHTML(this.props.formula.classicView)}</span>
-                <button className="btn btn-default" onClick={this.saveToXml.bind(null, this.props.formula.classicView)}>Save to Xml</button>
-                <button className="btn btn-default" onClick={this.saveToImg}>Save to Image</button>
-                <button className="btn btn-default" onClick={this.deleteFormula.bind(this)}>Delete</button>
+                {
+                    this.state.edit ?
+                        <div className="form-group">
+                            <input type="text" className="form-control" ref="edit_formula"/>
+                            <button className="btn btn-default" onClick={this.saveFormula.bind(this)}>Save</button>
+                            <button className="btn btn-default" onClick={() => this.setState({edit: false})}>Cancel</button>
+                        </div>
+                        :
+                        <div>
+                            <span id="formula">{renderHTML(this.props.formula.classicView)}</span>
+                            <button className="btn btn-default" onClick={this.saveToXml.bind(null, this.props.formula.classicView)}>Save to Xml</button>
+                            <button className="btn btn-default" onClick={this.saveToImg}>Save to Image</button>
+                            <button className="btn btn-default" onClick={() =>
+                                this.setState({edit: true}, () => this.refs.edit_formula.value = this.props.formula.body)}>Edit</button>
+                            <button className="btn btn-default" onClick={this.deleteFormula.bind(this)}>Delete</button>
+                        </div>
+                }
             </div>
         )
     }

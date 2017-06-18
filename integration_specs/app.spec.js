@@ -214,6 +214,63 @@ describe('app', () => {
 
         });
 
+        describe('update', () => {
+
+            describe('by id', () => {
+
+                let formula;
+                beforeEach(async () => {
+
+                    const formulaBody = {
+                        body: 'pow(x,2)',
+                        classicView: 'x<sup>2</sup>',
+                        language: 'c',
+                        userId: user._id
+                    };
+
+                    formula = await helpers.ensureFormula(formulaBody);
+
+                });
+
+                it('should update a formula', async () => {
+
+                    try {
+
+                        const formulaId = formula._id.toString();
+
+                        const newFormula = {
+                            body: 'pow(a,x)'
+                        };
+
+                        const resp = await axios.patch(`http://localhost:3300/api/formulas/${formulaId}`, newFormula);
+
+                        const { data } = resp;
+
+                        expect(data).to.deep.equal({
+                            data: {
+                                type: 'formula',
+                                id: formulaId,
+                                attributes: {
+                                    body: 'pow(a,x)',
+                                    classicView: 'a<sup>x</sup>',
+                                    language: 'c',
+                                    userId: user._id.toString(),
+                                    _id: formulaId
+                                }
+                            }
+                        });
+
+                    } catch (e) {
+                        console.error(e);
+                        throw e;
+                    }
+
+                });
+
+            });
+
+        });
+
 
         describe('getAllForUser', () => {
 

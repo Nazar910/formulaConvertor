@@ -115,6 +115,20 @@ class Editor extends React.Component {
         })
     }
 
+    updateFormula(id, body, index) {
+        axios.patch('http://localhost:9000/api/formulas/' + id, {body})
+            .then(({data}) => {
+                const arr = this.state.formulaList;
+
+                arr[index].attributes.body = body;
+                arr[index].attributes.classicView = data.data.attributes.classicView;
+
+                this.setState({
+                    formulaList: arr
+                })
+            })
+    }
+
     deleteFormula(index, id) {
         axios.delete('http://localhost:9000/api/formulas/' + id)
             .then(({data}) => {
@@ -164,6 +178,7 @@ class Editor extends React.Component {
                 <FormulaList
                     formulas={this.state.formulaList}
                     deleteFormula={this.deleteFormula.bind(this)}
+                    updateFormula={this.updateFormula.bind(this)}
                 />
             </div>
         )
