@@ -16,3 +16,8 @@ a {
     float: left;
     margin-left: 20px;
 }
+
+#log-out {
+    float: right;
+    margin-bottom: 20px;
+}

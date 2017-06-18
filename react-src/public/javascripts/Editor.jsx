@@ -33,7 +33,7 @@ class Editor extends React.Component {
     }
 
     componentDidMount() {
-        const token = localStorage.getItem('token');
+        const { token } = this.props;
         axios({
             url: 'http://localhost:9000/api/users/profile',
             method: 'GET',
@@ -129,10 +129,16 @@ class Editor extends React.Component {
             })
     }
 
+    logout() {
+        this.props.logout();
+    }
+
     render() {
         return(
             <div>
+                <button className="btn btn-success" id="log-out" onClick={this.logout.bind(this)}>Log out</button>
                 <div className="form-group">
+                    <br/>
                     <label>Formula:</label>
                     <textarea className="form-control"
                               placeholder="input"
