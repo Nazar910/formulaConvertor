@@ -1,7 +1,8 @@
 'use strict';
-const User = require('../models/user');
 const _ = require('lodash');
 const jwt = require('jsonwebtoken');
+
+const repository = require('../repositories/user');
 
 const serializer = require('../serializers/user');
 
@@ -15,10 +16,7 @@ async function createUser(req, res) {
             });
         }
 
-        const user = new User(userBody.attributes);
-
-        await user.hashPassword();
-        await user.save();
+        const user = await repository.createUser(userBody.attributes);
 
         const result = {
             data: serializer.serializeData(user)
