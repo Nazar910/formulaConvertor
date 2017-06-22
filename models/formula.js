@@ -23,6 +23,10 @@ Object.assign(formulaSchema.statics, {
       }).sort({
           updatedAt: -1
       });
+    },
+
+    deleteAllByUserId(userId) {
+        return this.remove({userId});
     }
 });
 

@@ -17,7 +17,17 @@ a {
     margin-left: 20px;
 }
 
-#log-out {
+#log-out,#delete-account {
     float: right;
+    margin-bottom: 20px;
+    margin-left: 10px;
+}
+
+.formula-btn {
+    float:right;
+    margin-left: 5px;
+}
+
+.formula {
     margin-bottom: 20px;
 }
