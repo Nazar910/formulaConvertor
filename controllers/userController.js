@@ -36,6 +36,12 @@ async function updateUser(req, res) {
 
         const userId = req.params.userId;
 
+        if (!userBody) {
+            return res.json({
+                error: ['Userbody is undefined!']
+            });
+        }
+
         const user = await repository.updateUser(userId, userBody.attributes);
 
         const result = {
@@ -50,26 +56,30 @@ async function updateUser(req, res) {
     }
 }
 
+async function deleteUser(req, res) {
+    try {
+        const userId = req.params.userId;
+
+        await repository.deleteUser(userId);
+
+        res.json({
+            deleted: true
+        });
+    } catch (e) {
+        res.json({
+            error: [e.message]
+        })
+    }
+}
+
 async function authenticateUser(req, res) {
     try {
         const { email, password } = req.body;
 
-        const user = await User.findByEmail(email);
+        const user = await repository.authenticateUser(email, password);
 
-        if (!user) {
-            return res.json({
-                error: 'User with such email not found!',
-                success: false
-            });
-        }
-
-        const validPassword = await user.isValidPassword(password);
-
-        if (!validPassword) {
-            return res.json({
-                error: 'Password or email is not valid!',
-                success: false
-            });
+        if (user.error) {
+            return res.json(user.error);
         }
 
         const token = jwt.sign(user, process.env.SECRET, {
@@ -97,5 +107,6 @@ async function authenticateUser(req, res) {
 module.exports = {
     createUser,
     updateUser,
-    authenticateUser
+    authenticateUser,
+    deleteUser
 };

@@ -20,7 +20,37 @@ async function updateUser(userId, userBody) {
     return user.save();
 }
 
+async function deleteUser(userId) {
+    const user = await User.findById(userId);
+
+    return user.remove();
+}
+
+async function authenticateUser(email, password) {
+    const user = await User.findByEmail(email);
+
+    if (!user) {
+        return {
+            error: 'User with such email not found!',
+            success: false
+        };
+    }
+
+    const validPassword = await user.isValidPassword(password);
+
+    if (!validPassword) {
+        return {
+            error: 'Password or email is not valid!',
+            success: false
+        };
+    }
+
+    return user;
+}
+
 module.exports = {
     createUser,
-    updateUser
+    updateUser,
+    deleteUser,
+    authenticateUser
 };

@@ -86,18 +86,25 @@ describe('app', () => {
         describe('update', () => {
 
             let user;
+            let token;
             beforeEach(async () => {
 
                 try {
+                    const email = 'example@example.com';
+                    const password = 'qwerty';
+
                     const userBody = {
                         name: 'Name',
                         lastName: 'lastName',
-                        email: 'example@example.com',
-                        password: 'qwerty',
+                        email,
+                        password,
                         company: 'some'
                     };
 
                     user = await helpers.ensureUser(userBody);
+
+                    const { data } = await axios.post('http://localhost:3300/api/users/authenticate', {email, password});
+                    token = data.token;
 
                 } catch (e) {
                     console.error(e);
@@ -122,14 +129,20 @@ describe('app', () => {
                                 }
                             }
                         };
-                        const resp = await axios.patch(`http://localhost:3300/api/users/${user._id}`, reqBody);
+                        const resp = await axios({
+                            url: `http://localhost:3300/api/users/${user._id}`,
+                            method: 'PATCH',
+                            headers: {
+                                Authorization: token
+                            },
+                            data: reqBody
+                        });
 
                         const actualData = resp.data;
 
                         expect(actualData.data.type).to.equal('user');
 
                         const attributes = _.omit(actualData.data.attributes, ['_id']);
-                        const expectedAttributes = _.omit(reqBody.data.attributes, ['password']);
 
                         expect(attributes).to.deep.equal({
                             name: 'NewName',
@@ -152,7 +165,14 @@ describe('app', () => {
 
                     try {
                         const userBody = {};
-                        const resp = await axios.post('http://localhost:3300/api/users/', userBody);
+                        const resp = await axios({
+                            url: `http://localhost:3300/api/users/${user._id}`,
+                            method: 'PATCH',
+                            headers: {
+                                Authorization: token
+                            },
+                            data: userBody
+                        });
 
                         expect(resp.data).to.deep.equal({
                             error: ['Userbody is undefined!']

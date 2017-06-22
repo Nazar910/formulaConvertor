@@ -3,8 +3,10 @@
 const User = require('../models/user');
 const Formula = require('../models/formula');
 
-function ensureUser(userBody) {
+async function ensureUser(userBody) {
     const user = new User(userBody);
+    await user.hashPassword();
+
     return user.save();
 }
 
