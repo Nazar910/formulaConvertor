@@ -254,18 +254,24 @@ describe('app', () => {
     describe('formulas', () => {
 
         let user;
+        let token;
         before(async () => {
 
             try {
+                const email = 'email1@example.com';
+                const password = 'qwerty';
+
                 const userBody = {
                     name: 'Name',
                     lastName: 'lastName',
-                    email: 'email1@example.com',
-                    password: 'qwerty',
+                    email,
+                    password,
                     company: 'some'
                 };
 
                 user = await helpers.ensureUser(userBody);
+                const { data } = await axios.post('http://localhost:3300/api/users/authenticate', {email, password});
+                token = data.token;
 
             } catch (e) {
                 console.error(e);
@@ -292,7 +298,14 @@ describe('app', () => {
                             }
 
                         };
-                        const resp = await axios.post(`http://localhost:3300/api/formulas/${user.id}`, formulaBody);
+                        const resp = await axios({
+                            url: `http://localhost:3300/api/formulas/${user.id}`,
+                            method: 'POST',
+                            data: formulaBody,
+                            headers: {
+                                Authorization: token
+                            }
+                        });
 
                         const { data: actualData } = resp.data;
 
@@ -320,7 +333,14 @@ describe('app', () => {
 
                     try {
                         const formulaBody = {};
-                        const resp = await axios.post(`http://localhost:3300/api/formulas/${user._id}`, formulaBody);
+                        const resp = await axios({
+                            url: `http://localhost:3300/api/formulas/${user.id}`,
+                            method: 'POST',
+                            data: formulaBody,
+                            headers: {
+                                Authorization: token
+                            }
+                        });
 
                         expect(resp.data).to.deep.equal({
                             error: ['FormulasBody is undefined!']
@@ -357,7 +377,13 @@ describe('app', () => {
                     try {
 
                         const formulaId = formula._id.toString();
-                        const resp = await axios.delete(`http://localhost:3300/api/formulas/${formulaId}`);
+                        const resp = await axios({
+                            url: `http://localhost:3300/api/formulas/${formulaId}`,
+                            method: 'DELETE',
+                            headers: {
+                                Authorization: token
+                            }
+                        });
 
                         const { data } = resp;
 
@@ -408,7 +434,14 @@ describe('app', () => {
                             body: 'pow(a,x)'
                         };
 
-                        const resp = await axios.patch(`http://localhost:3300/api/formulas/${formulaId}`, newFormula);
+                        const resp = await axios({
+                            url: `http://localhost:3300/api/formulas/${formulaId}`,
+                            method: 'PATCH',
+                            data: newFormula,
+                            headers: {
+                                Authorization: token
+                            }
+                        });
 
                         const { data } = resp;
 
@@ -485,7 +518,13 @@ describe('app', () => {
             it('should get user formulas', async () => {
 
                 try {
-                    const { data: responseData } = await axios.get(`http://localhost:3300/api/formulas/${user._id}`);
+                    const { data: responseData } = await axios({
+                        url: `http://localhost:3300/api/formulas/${user.id}`,
+                        method: 'GET',
+                        headers: {
+                            Authorization: token
+                        }
+                    });
 
                     expect(responseData).to.deep.equal({
 
