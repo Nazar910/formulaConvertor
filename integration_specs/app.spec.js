@@ -185,7 +185,64 @@ describe('app', () => {
 
             });
 
-        })
+        });
+
+        describe('delete', () => {
+
+            let user;
+            let token;
+            beforeEach(async () => {
+
+                try {
+                    const email = 'example@example.com';
+                    const password = 'qwerty';
+
+                    const userBody = {
+                        name: 'Name',
+                        lastName: 'lastName',
+                        email,
+                        password,
+                        company: 'some'
+                    };
+
+                    user = await helpers.ensureUser(userBody);
+
+                    const { data } = await axios.post('http://localhost:3300/api/users/authenticate', {email, password});
+                    token = data.token;
+
+                } catch (e) {
+                    console.error(e);
+                    throw e;
+                }
+
+            });
+
+            describe('with valid id', () => {
+
+                it('should delete a user', async () => {
+
+                    try {
+                        const resp = await axios({
+                            url: `http://localhost:3300/api/users/${user._id}`,
+                            method: 'DELETE',
+                            headers: {
+                                Authorization: token
+                            }
+                        });
+
+                        const actualData = resp.data;
+
+                        expect(actualData.deleted).to.equal(true);
+                    } catch (e) {
+                        console.error(e);
+                        throw e;
+                    }
+
+                });
+
+            });
+
+        });
 
     });
 
