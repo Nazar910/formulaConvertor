@@ -233,6 +233,11 @@ describe('app', () => {
                         const actualData = resp.data;
 
                         expect(actualData.deleted).to.equal(true);
+
+                        const deletedUser = await helpers.findUser(user._id);
+
+                        expect(deletedUser).to.be.null;
+
                     } catch (e) {
                         console.error(e);
                         throw e;

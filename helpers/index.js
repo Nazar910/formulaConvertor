@@ -25,9 +25,14 @@ function findFormula(_id) {
     return Formula.findById(_id);
 }
 
+function findUser(_id) {
+    return User.findById(_id);
+}
+
 module.exports = {
     ensureUser,
     ensureFormula,
     findFormula,
-    deleteUserById
+    deleteUserById,
+    findUser
 };
