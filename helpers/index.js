@@ -8,6 +8,12 @@ function ensureUser(userBody) {
     return user.save();
 }
 
+async function deleteUserById(userId) {
+    const user = await User.findById(userId);
+
+    return user.remove();
+}
+
 function ensureFormula(formulaBody) {
     const formula = new Formula(formulaBody);
     return formula.save();
@@ -20,5 +26,6 @@ function findFormula(_id) {
 module.exports = {
     ensureUser,
     ensureFormula,
-    findFormula
+    findFormula,
+    deleteUserById
 };

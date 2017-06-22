@@ -81,6 +81,90 @@ describe('app', () => {
 
             });
 
+        });
+
+        describe('update', () => {
+
+            let user;
+            beforeEach(async () => {
+
+                try {
+                    const userBody = {
+                        name: 'Name',
+                        lastName: 'lastName',
+                        email: 'example@example.com',
+                        password: 'qwerty',
+                        company: 'some'
+                    };
+
+                    user = await helpers.ensureUser(userBody);
+
+                } catch (e) {
+                    console.error(e);
+                    throw e;
+                }
+
+            });
+
+            afterEach(() => helpers.deleteUserById(user._id));
+
+            describe('with valid userBody', () => {
+
+                it('should update a user', async () => {
+
+                    try {
+                        const reqBody = {
+                            data: {
+                                type: 'user',
+                                attributes: {
+                                    name: 'NewName',
+                                    email: 'newEmail@example.com'
+                                }
+                            }
+                        };
+                        const resp = await axios.patch(`http://localhost:3300/api/users/${user._id}`, reqBody);
+
+                        const actualData = resp.data;
+
+                        expect(actualData.data.type).to.equal('user');
+
+                        const attributes = _.omit(actualData.data.attributes, ['_id']);
+                        const expectedAttributes = _.omit(reqBody.data.attributes, ['password']);
+
+                        expect(attributes).to.deep.equal({
+                            name: 'NewName',
+                            lastName: 'lastName',
+                            email: 'newEmail@example.com',
+                            company: 'some'
+                        });
+                    } catch (e) {
+                        console.error(e);
+                        throw e;
+                    }
+
+                });
+
+            });
+
+            describe('with undefined userBody', () => {
+
+                it('should cause an error', async () => {
+
+                    try {
+                        const userBody = {};
+                        const resp = await axios.post('http://localhost:3300/api/users/', userBody);
+
+                        expect(resp.data).to.deep.equal({
+                            error: ['Userbody is undefined!']
+                        });
+                    } catch (e) {
+                        throw e;
+                    }
+
+                });
+
+            });
+
         })
 
     });

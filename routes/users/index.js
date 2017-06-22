@@ -7,6 +7,7 @@ const userController = require('../../controllers/userController');
 
 router.post('/authenticate', userController.authenticateUser);
 router.post('/', userController.createUser);
+router.patch('/:userId', userController.updateUser);
 
 router.get('/profile', passport.authenticate('jwt', {session: false}), (req, res) => {
     res.json({

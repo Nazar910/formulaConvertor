@@ -32,20 +32,17 @@ async function createUser(req, res) {
 
 async function updateUser(req, res) {
     try {
-        const { user: userBody } = req.body;
+        const { data: userBody } = req.body;
 
         const userId = req.params.userId;
 
-        const user = await User.findById(userId);
+        const user = await repository.updateUser(userId, userBody.attributes);
 
-        const userProperties
-            = _.pick(userBody, ['email', 'name', 'lastName', 'password', 'company']);
+        const result = {
+            data: serializer.serializeData(user)
+        };
 
-        _.mapKeys(userProperties, (value, key) => user[key] = value);
-
-        await user.save();
-
-        res.json(serializer.serializeData(user));
+        res.json(result);
     } catch (e) {
         res.json({
             error: [e.message]
@@ -97,6 +94,8 @@ async function authenticateUser(req, res) {
     }
 }
 
-module.exports.createUser = createUser;
-module.exports.updateUser = updateUser;
-module.exports.authenticateUser = authenticateUser;
+module.exports = {
+    createUser,
+    updateUser,
+    authenticateUser
+};
