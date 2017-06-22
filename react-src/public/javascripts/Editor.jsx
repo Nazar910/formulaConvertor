@@ -87,7 +87,16 @@ class Editor extends React.Component {
             }
         };
 
-        return axios.post('http://localhost:9000/api/formulas/' + this.state.user._id, formulaBody);
+        const { token } = this.props;
+
+        return axios({
+            url: 'http://localhost:9000/api/formulas/' + this.state.user._id,
+            method: 'POST',
+            data: formulaBody,
+            headers: {
+                Authorization: token
+            }
+        });
     }
 
     processInputFormula() {
@@ -116,7 +125,18 @@ class Editor extends React.Component {
     }
 
     updateFormula(id, body, index) {
-        axios.patch('http://localhost:9000/api/formulas/' + id, {body})
+        const { token } = this.props;
+
+        axios({
+            url: 'http://localhost:9000/api/formulas/' + id,
+            method: 'PATCH',
+            data: {
+                body
+            },
+            headers: {
+                Authorization: token
+            }
+        })
             .then(({data}) => {
                 const arr = this.state.formulaList;
 
@@ -130,7 +150,15 @@ class Editor extends React.Component {
     }
 
     deleteFormula(index, id) {
-        axios.delete('http://localhost:9000/api/formulas/' + id)
+        const { token } = this.props;
+
+        axios({
+            url: 'http://localhost:9000/api/formulas/' + id,
+            method: 'DELETE',
+            headers: {
+                Authorization: token
+            }
+        })
             .then(({data}) => {
                 if (data.deleted === true) {
                     const formulaList = this.state.formulaList;
