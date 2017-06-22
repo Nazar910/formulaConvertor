@@ -39,7 +39,7 @@ class Formula extends React.Component {
 
     render(){
         return (
-            <div>
+            <div className="formula">
                 {
                     this.state.edit ?
                         <div className="form-group">
@@ -49,12 +49,14 @@ class Formula extends React.Component {
                         </div>
                         :
                         <div>
-                            <span id="formula">{renderHTML(this.props.formula.classicView)}</span>
-                            <button className="btn btn-default" onClick={this.saveToXml.bind(null, this.props.formula.classicView)}>Save to Xml</button>
-                            <button className="btn btn-default" onClick={this.saveToImg}>Save to Image</button>
-                            <button className="btn btn-default" onClick={() =>
-                                this.setState({edit: true}, () => this.refs.edit_formula.value = this.props.formula.body)}>Edit</button>
-                            <button className="btn btn-default" onClick={this.deleteFormula.bind(this)}>Delete</button>
+                            <span id="formula" onClick={
+                                () => this.setState({edit: true},
+                                    () => this.refs.edit_formula.value = this.props.formula.body)}>
+                                {renderHTML(this.props.formula.classicView)}
+                            </span>
+                            <button className="btn btn-default formula-btn" onClick={this.deleteFormula.bind(this)}>Delete</button>
+                            <button className="btn btn-default formula-btn" onClick={this.saveToXml.bind(null, this.props.formula.classicView)}>Save to Xml</button>
+                            <button className="btn btn-default formula-btn" onClick={this.saveToImg}>Save to Image</button>
                         </div>
                 }
             </div>

@@ -22,3 +22,12 @@ a {
     margin-bottom: 20px;
     margin-left: 10px;
 }
+
+.formula-btn {
+    float:right;
+    margin-left: 5px;
+}
+
+.formula {
+    margin-bottom: 20px;
+}
