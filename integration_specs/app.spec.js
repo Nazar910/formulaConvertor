@@ -81,25 +81,197 @@ describe('app', () => {
 
             });
 
-        })
+        });
+
+        describe('update', () => {
+
+            let user;
+            let token;
+            beforeEach(async () => {
+
+                try {
+                    const email = 'example@example.com';
+                    const password = 'qwerty';
+
+                    const userBody = {
+                        name: 'Name',
+                        lastName: 'lastName',
+                        email,
+                        password,
+                        company: 'some'
+                    };
+
+                    user = await helpers.ensureUser(userBody);
+
+                    const { data } = await axios.post('http://localhost:3300/api/users/authenticate', {email, password});
+                    token = data.token;
+
+                } catch (e) {
+                    console.error(e);
+                    throw e;
+                }
+
+            });
+
+            afterEach(() => helpers.deleteUserById(user._id));
+
+            describe('with valid userBody', () => {
+
+                it('should update a user', async () => {
+
+                    try {
+                        const reqBody = {
+                            data: {
+                                type: 'user',
+                                attributes: {
+                                    name: 'NewName',
+                                    email: 'newEmail@example.com'
+                                }
+                            }
+                        };
+                        const resp = await axios({
+                            url: `http://localhost:3300/api/users/${user._id}`,
+                            method: 'PATCH',
+                            headers: {
+                                Authorization: token
+                            },
+                            data: reqBody
+                        });
+
+                        const actualData = resp.data;
+
+                        expect(actualData.data.type).to.equal('user');
+
+                        const attributes = _.omit(actualData.data.attributes, ['_id']);
+
+                        expect(attributes).to.deep.equal({
+                            name: 'NewName',
+                            lastName: 'lastName',
+                            email: 'newEmail@example.com',
+                            company: 'some'
+                        });
+                    } catch (e) {
+                        console.error(e);
+                        throw e;
+                    }
+
+                });
+
+            });
+
+            describe('with undefined userBody', () => {
+
+                it('should cause an error', async () => {
+
+                    try {
+                        const userBody = {};
+                        const resp = await axios({
+                            url: `http://localhost:3300/api/users/${user._id}`,
+                            method: 'PATCH',
+                            headers: {
+                                Authorization: token
+                            },
+                            data: userBody
+                        });
+
+                        expect(resp.data).to.deep.equal({
+                            error: ['Userbody is undefined!']
+                        });
+                    } catch (e) {
+                        throw e;
+                    }
+
+                });
+
+            });
+
+        });
+
+        describe('delete', () => {
+
+            let user;
+            let token;
+            beforeEach(async () => {
+
+                try {
+                    const email = 'example@example.com';
+                    const password = 'qwerty';
+
+                    const userBody = {
+                        name: 'Name',
+                        lastName: 'lastName',
+                        email,
+                        password,
+                        company: 'some'
+                    };
+
+                    user = await helpers.ensureUser(userBody);
+
+                    const { data } = await axios.post('http://localhost:3300/api/users/authenticate', {email, password});
+                    token = data.token;
+
+                } catch (e) {
+                    console.error(e);
+                    throw e;
+                }
+
+            });
+
+            describe('with valid id', () => {
+
+                it('should delete a user', async () => {
+
+                    try {
+                        const resp = await axios({
+                            url: `http://localhost:3300/api/users/${user._id}`,
+                            method: 'DELETE',
+                            headers: {
+                                Authorization: token
+                            }
+                        });
+
+                        const actualData = resp.data;
+
+                        expect(actualData.deleted).to.equal(true);
+
+                        const deletedUser = await helpers.findUser(user._id);
+
+                        expect(deletedUser).to.be.null;
+
+                    } catch (e) {
+                        console.error(e);
+                        throw e;
+                    }
+
+                });
+
+            });
+
+        });
 
     });
 
     describe('formulas', () => {
 
         let user;
+        let token;
         before(async () => {
 
             try {
+                const email = 'email1@example.com';
+                const password = 'qwerty';
+
                 const userBody = {
                     name: 'Name',
                     lastName: 'lastName',
-                    email: 'email1@example.com',
-                    password: 'qwerty',
+                    email,
+                    password,
                     company: 'some'
                 };
 
                 user = await helpers.ensureUser(userBody);
+                const { data } = await axios.post('http://localhost:3300/api/users/authenticate', {email, password});
+                token = data.token;
 
             } catch (e) {
                 console.error(e);
@@ -126,7 +298,14 @@ describe('app', () => {
                             }
 
                         };
-                        const resp = await axios.post(`http://localhost:3300/api/formulas/${user.id}`, formulaBody);
+                        const resp = await axios({
+                            url: `http://localhost:3300/api/formulas/${user.id}`,
+                            method: 'POST',
+                            data: formulaBody,
+                            headers: {
+                                Authorization: token
+                            }
+                        });
 
                         const { data: actualData } = resp.data;
 
@@ -154,7 +333,14 @@ describe('app', () => {
 
                     try {
                         const formulaBody = {};
-                        const resp = await axios.post(`http://localhost:3300/api/formulas/${user._id}`, formulaBody);
+                        const resp = await axios({
+                            url: `http://localhost:3300/api/formulas/${user.id}`,
+                            method: 'POST',
+                            data: formulaBody,
+                            headers: {
+                                Authorization: token
+                            }
+                        });
 
                         expect(resp.data).to.deep.equal({
                             error: ['FormulasBody is undefined!']
@@ -191,7 +377,13 @@ describe('app', () => {
                     try {
 
                         const formulaId = formula._id.toString();
-                        const resp = await axios.delete(`http://localhost:3300/api/formulas/${formulaId}`);
+                        const resp = await axios({
+                            url: `http://localhost:3300/api/formulas/${formulaId}`,
+                            method: 'DELETE',
+                            headers: {
+                                Authorization: token
+                            }
+                        });
 
                         const { data } = resp;
 
@@ -242,7 +434,14 @@ describe('app', () => {
                             body: 'pow(a,x)'
                         };
 
-                        const resp = await axios.patch(`http://localhost:3300/api/formulas/${formulaId}`, newFormula);
+                        const resp = await axios({
+                            url: `http://localhost:3300/api/formulas/${formulaId}`,
+                            method: 'PATCH',
+                            data: newFormula,
+                            headers: {
+                                Authorization: token
+                            }
+                        });
 
                         const { data } = resp;
 
@@ -319,7 +518,13 @@ describe('app', () => {
             it('should get user formulas', async () => {
 
                 try {
-                    const { data: responseData } = await axios.get(`http://localhost:3300/api/formulas/${user._id}`);
+                    const { data: responseData } = await axios({
+                        url: `http://localhost:3300/api/formulas/${user.id}`,
+                        method: 'GET',
+                        headers: {
+                            Authorization: token
+                        }
+                    });
 
                     expect(responseData).to.deep.equal({
 
