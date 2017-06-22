@@ -191,6 +191,7 @@ describe('app', () => {
 
             let user;
             let token;
+            let formula;
             beforeEach(async () => {
 
                 try {
@@ -206,6 +207,15 @@ describe('app', () => {
                     };
 
                     user = await helpers.ensureUser(userBody);
+
+                    const formulaBody = {
+                        body: 'pow(x,2)',
+                        classicView: 'x<sup>2</sup>',
+                        language: 'c',
+                        userId: user._id
+                    };
+
+                    formula = await helpers.ensureFormula(formulaBody);
 
                     const { data } = await axios.post('http://localhost:3300/api/users/authenticate', {email, password});
                     token = data.token;
@@ -237,6 +247,12 @@ describe('app', () => {
                         const deletedUser = await helpers.findUser(user._id);
 
                         expect(deletedUser).to.be.null;
+
+                        const formulaId = formula._id.toString();
+
+                        const deletedFormula = await helpers.findFormula(formulaId);
+
+                        expect(deletedFormula).to.be.null;
 
                     } catch (e) {
                         console.error(e);

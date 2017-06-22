@@ -58,6 +58,7 @@ async function updateUser(req, res) {
 
 async function deleteUser(req, res) {
     try {
+        console.log('HERE');
         const userId = req.params.userId;
 
         await repository.deleteUser(userId);

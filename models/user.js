@@ -30,6 +30,14 @@ Object.assign(userSchema.statics, {
         return this.findOne({
             _id: id
         })
+    },
+
+    async deleteById(id) {
+        const user = await this.findById(id);
+
+        await Formula.deleteAllByUserId(id);
+
+        return user.remove();
     }
 
 });

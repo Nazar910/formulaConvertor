@@ -21,9 +21,7 @@ async function updateUser(userId, userBody) {
 }
 
 async function deleteUser(userId) {
-    const user = await User.findById(userId);
-
-    return user.remove();
+    return User.deleteById(userId);
 }
 
 async function authenticateUser(email, password) {

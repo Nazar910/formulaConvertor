@@ -17,7 +17,8 @@ a {
     margin-left: 20px;
 }
 
-#log-out {
+#log-out,#delete-account {
     float: right;
     margin-bottom: 20px;
+    margin-left: 10px;
 }

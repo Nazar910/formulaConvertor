@@ -175,9 +175,39 @@ class Editor extends React.Component {
         this.props.logout();
     }
 
+    deleteAccount() {
+        const DeleteWindow = 'Are you sure you want to delete your account?';
+
+        if (confirm(DeleteWindow)) {
+            axios.post('http://localhost:9000/api/users/authenticate', {
+                email: this.state.user.email,
+                password: this.state.user.password
+            }).then( () => {
+                axios({
+                    url: `http://localhost:9000/api/users/${this.state.user._id}`,
+                    method: 'DELETE',
+                    headers: {
+                        Authorization: this.props.token
+                    }
+                })
+                    .then(({data}) => {
+                        if (data.deleted) {
+                            this.logout.call(this);
+                            return;
+                        }
+
+                        this.setState({error: data.error});
+                    })
+            });
+        }
+
+    }
+
     render() {
         return(
             <div>
+                Hello, { this.state.user.name }
+                <button className="btn btn-success" id="delete-account" onClick={this.deleteAccount.bind(this)}>Delete my account</button>
                 <button className="btn btn-success" id="log-out" onClick={this.logout.bind(this)}>Log out</button>
                 <div className="form-group">
                     <br/>
