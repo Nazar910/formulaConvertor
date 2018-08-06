@@ -1,5 +1,4 @@
 'use strict';
-const _ = require('lodash');
 const jwt = require('jsonwebtoken');
 
 const repository = require('../repositories/user');

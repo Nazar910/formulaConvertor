@@ -7,12 +7,11 @@ describe('app', () => {
 
     const helpers = require('../helpers');
 
-    let app;
     before(() => {
         process.env.MONGO_URI = 'mongodb://localhost/test_db';
         process.env.API_PORT = 3300;
         process.env.SECRET = 'test';
-        app = require('../index');
+        require('../index');
     });
 
     after(() => {
@@ -213,13 +212,13 @@ describe('app', () => {
 
                         const deletedUser = await helpers.findUser(user._id);
 
-                        expect(deletedUser).to.be.null;
+                        expect(deletedUser).to.be.equal(null);
 
                         const formulaId = formula._id.toString();
 
                         const deletedFormula = await helpers.findFormula(formulaId);
 
-                        expect(deletedFormula).to.be.null;
+                        expect(deletedFormula).to.be.equal(null);
                     } catch (e) {
                         console.error(e);
                         throw e;
@@ -350,7 +349,7 @@ describe('app', () => {
 
                         const deletedFormula = await helpers.findFormula(formulaId);
 
-                        expect(deletedFormula).to.be.null;
+                        expect(deletedFormula).to.be.equal(null);
                     } catch (e) {
                         console.error(e);
                         throw e;
