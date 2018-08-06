@@ -7,9 +7,7 @@ const _ = require('lodash');
 const expect = require('chai').expect;
 
 describe('userSerializer', () => {
-
     it('should serialize userBody to json api format', () => {
-
         const _id = mongoose.Types.ObjectId();
         const userBody = {
             _id,
@@ -27,6 +25,5 @@ describe('userSerializer', () => {
             type: 'user',
             attributes: _.omit(userBody, ['password'])
         });
-    })
-
+    });
 });

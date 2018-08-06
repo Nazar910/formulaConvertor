@@ -4,17 +4,17 @@ const path = require('path');
 
 const app = express();
 
-//load all envVars
+// load all envVars
 require('dotenv').config();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
-//use static directory
+// use static directory
 app.use(express.static(path.join(__dirname, 'public')));
 
-//the most important route
+// the most important route
 app.use('/', (req, res) => {
     res.render('index', { title: 'Express' });
 });

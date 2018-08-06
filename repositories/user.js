@@ -2,29 +2,29 @@
 const User = require('../models/user');
 const _ = require('lodash');
 
-async function createUser(userBody) {
+async function createUser (userBody) {
     const user = new User(userBody);
 
     await user.hashPassword();
-    return user.save()
+    return user.save();
 }
 
-async function updateUser(userId, userBody) {
+async function updateUser (userId, userBody) {
     const user = await User.findById(userId);
 
-    const userProperties
-        = _.pick(userBody, ['email', 'name', 'lastName', 'password', 'company']);
+    const userProperties =
+        _.pick(userBody, ['email', 'name', 'lastName', 'password', 'company']);
 
-    _.mapKeys(userProperties, (value, key) => user[key] = value);
+    Object.assign(user, userProperties);
 
     return user.save();
 }
 
-async function deleteUser(userId) {
+async function deleteUser (userId) {
     return User.deleteById(userId);
 }
 
-async function authenticateUser(email, password) {
+async function authenticateUser (email, password) {
     const user = await User.findByEmail(email);
 
     if (!user) {

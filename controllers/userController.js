@@ -6,7 +6,7 @@ const repository = require('../repositories/user');
 
 const serializer = require('../serializers/user');
 
-async function createUser(req, res) {
+async function createUser (req, res) {
     try {
         const { data: userBody } = req.body;
 
@@ -26,11 +26,11 @@ async function createUser(req, res) {
     } catch (e) {
         res.json({
             error: [e.message]
-        })
+        });
     }
 }
 
-async function updateUser(req, res) {
+async function updateUser (req, res) {
     try {
         const { data: userBody } = req.body;
 
@@ -52,11 +52,11 @@ async function updateUser(req, res) {
     } catch (e) {
         res.json({
             error: [e.message]
-        })
+        });
     }
 }
 
-async function deleteUser(req, res) {
+async function deleteUser (req, res) {
     try {
         const userId = req.params.userId;
 
@@ -68,11 +68,11 @@ async function deleteUser(req, res) {
     } catch (e) {
         res.json({
             error: [e.message]
-        })
+        });
     }
 }
 
-async function authenticateUser(req, res) {
+async function authenticateUser (req, res) {
     try {
         const { email, password } = req.body;
 
@@ -96,11 +96,11 @@ async function authenticateUser(req, res) {
                 email: user.email,
                 company: user.company
             }
-        })
+        });
     } catch (e) {
         res.json({
             error: [e.message]
-        })
+        });
     }
 }
 

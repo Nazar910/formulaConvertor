@@ -1,6 +1,5 @@
 'use strict';
 describe('app', () => {
-
     const expect = require('chai').expect;
     const axios = require('axios');
     const mongoose = require('mongoose');
@@ -10,12 +9,10 @@ describe('app', () => {
 
     let app;
     before(() => {
-
         process.env.MONGO_URI = 'mongodb://localhost/test_db';
         process.env.API_PORT = 3300;
-        process.env.SECRET='test';
+        process.env.SECRET = 'test';
         app = require('../index');
-
     });
 
     after(() => {
@@ -23,13 +20,9 @@ describe('app', () => {
     });
 
     describe('users', () => {
-
         describe('create', () => {
-
             describe('with valid userBody', () => {
-
                 it('should create a user', async () => {
-
                     try {
                         const reqBody = {
                             data: {
@@ -57,15 +50,11 @@ describe('app', () => {
                         console.error(e);
                         throw e;
                     }
-
                 });
-
             });
 
             describe('with undefined userBody', () => {
-
                 it('should cause an error', async () => {
-
                     try {
                         const userBody = {};
                         const resp = await axios.post('http://localhost:3300/api/users/', userBody);
@@ -76,19 +65,14 @@ describe('app', () => {
                     } catch (e) {
                         throw e;
                     }
-
                 });
-
             });
-
         });
 
         describe('update', () => {
-
             let user;
             let token;
             beforeEach(async () => {
-
                 try {
                     const email = 'example@example.com';
                     const password = 'qwerty';
@@ -105,20 +89,16 @@ describe('app', () => {
 
                     const { data } = await axios.post('http://localhost:3300/api/users/authenticate', {email, password});
                     token = data.token;
-
                 } catch (e) {
                     console.error(e);
                     throw e;
                 }
-
             });
 
             afterEach(() => helpers.deleteUserById(user._id));
 
             describe('with valid userBody', () => {
-
                 it('should update a user', async () => {
-
                     try {
                         const reqBody = {
                             data: {
@@ -154,15 +134,11 @@ describe('app', () => {
                         console.error(e);
                         throw e;
                     }
-
                 });
-
             });
 
             describe('with undefined userBody', () => {
-
                 it('should cause an error', async () => {
-
                     try {
                         const userBody = {};
                         const resp = await axios({
@@ -180,20 +156,15 @@ describe('app', () => {
                     } catch (e) {
                         throw e;
                     }
-
                 });
-
             });
-
         });
 
         describe('delete', () => {
-
             let user;
             let token;
             let formula;
             beforeEach(async () => {
-
                 try {
                     const email = 'example@example.com';
                     const password = 'qwerty';
@@ -219,18 +190,14 @@ describe('app', () => {
 
                     const { data } = await axios.post('http://localhost:3300/api/users/authenticate', {email, password});
                     token = data.token;
-
                 } catch (e) {
                     console.error(e);
                     throw e;
                 }
-
             });
 
             describe('with valid id', () => {
-
                 it('should delete a user', async () => {
-
                     try {
                         const resp = await axios({
                             url: `http://localhost:3300/api/users/${user._id}`,
@@ -253,26 +220,19 @@ describe('app', () => {
                         const deletedFormula = await helpers.findFormula(formulaId);
 
                         expect(deletedFormula).to.be.null;
-
                     } catch (e) {
                         console.error(e);
                         throw e;
                     }
-
                 });
-
             });
-
         });
-
     });
 
     describe('formulas', () => {
-
         let user;
         let token;
         before(async () => {
-
             try {
                 const email = 'email1@example.com';
                 const password = 'qwerty';
@@ -288,20 +248,15 @@ describe('app', () => {
                 user = await helpers.ensureUser(userBody);
                 const { data } = await axios.post('http://localhost:3300/api/users/authenticate', {email, password});
                 token = data.token;
-
             } catch (e) {
                 console.error(e);
                 throw e;
             }
-
         });
 
         describe('create', () => {
-
             describe('with valid body', () => {
-
                 it('should create a formula', async () => {
-
                     try {
                         const formulaBody = {
                             data: {
@@ -333,20 +288,15 @@ describe('app', () => {
                                 _.assign(formulaBody.data.attributes, {
                                     userId: user.id
                                 }));
-
                     } catch (e) {
                         console.error(e);
                         throw e;
                     }
-
                 });
-
             });
 
             describe('with undefined formulaBody', () => {
-
                 it('should cause an error', async () => {
-
                     try {
                         const formulaBody = {};
                         const resp = await axios({
@@ -364,19 +314,13 @@ describe('app', () => {
                     } catch (e) {
                         throw e;
                     }
-
                 });
-
             });
-
         });
         describe('delete', () => {
-
             describe('by id', () => {
-
                 let formula;
                 beforeEach(async () => {
-
                     const formulaBody = {
                         body: 'pow(x,2)',
                         classicView: 'x<sup>2</sup>',
@@ -385,13 +329,10 @@ describe('app', () => {
                     };
 
                     formula = await helpers.ensureFormula(formulaBody);
-
                 });
 
                 it('should delete a formula', async () => {
-
                     try {
-
                         const formulaId = formula._id.toString();
                         const resp = await axios({
                             url: `http://localhost:3300/api/formulas/${formulaId}`,
@@ -410,25 +351,18 @@ describe('app', () => {
                         const deletedFormula = await helpers.findFormula(formulaId);
 
                         expect(deletedFormula).to.be.null;
-
                     } catch (e) {
                         console.error(e);
                         throw e;
                     }
-
                 });
-
             });
-
         });
 
         describe('update', () => {
-
             describe('by id', () => {
-
                 let formula;
                 beforeEach(async () => {
-
                     const formulaBody = {
                         body: 'pow(x,2)',
                         classicView: 'x<sup>2</sup>',
@@ -437,13 +371,10 @@ describe('app', () => {
                     };
 
                     formula = await helpers.ensureFormula(formulaBody);
-
                 });
 
                 it('should update a formula', async () => {
-
                     try {
-
                         const formulaId = formula._id.toString();
 
                         const newFormula = {
@@ -474,27 +405,19 @@ describe('app', () => {
                                 }
                             }
                         });
-
                     } catch (e) {
                         console.error(e);
                         throw e;
                     }
-
                 });
-
             });
-
         });
 
-
         describe('getAllForUser', () => {
-
             let user;
             let formulas;
             beforeEach(async () => {
-
                 try {
-
                     const userBody = {
                         name: 'Name',
                         lastName: 'lastName',
@@ -522,17 +445,14 @@ describe('app', () => {
                     const formula1 = await helpers.ensureFormula(formulaBody1);
                     const formula2 = await helpers.ensureFormula(formulaBody2);
 
-                    formulas = [formula1,formula2];
-
+                    formulas = [formula1, formula2];
                 } catch (e) {
                     console.error(e);
                     throw e;
                 }
-
             });
 
             it('should get user formulas', async () => {
-
                 try {
                     const { data: responseData } = await axios({
                         url: `http://localhost:3300/api/formulas/${user.id}`,
@@ -553,7 +473,7 @@ describe('app', () => {
                                     classicView: 'x<sup>2</sup>',
                                     language: 'pascal',
                                     userId: user._id.toString(),
-                                    _id: formulas[1]._id.toString(),
+                                    _id: formulas[1]._id.toString()
                                 }
                             },
                             {
@@ -564,22 +484,17 @@ describe('app', () => {
                                     classicView: 'x<sup>2</sup>',
                                     language: 'c',
                                     userId: user._id.toString(),
-                                    _id: formulas[0]._id.toString(),
+                                    _id: formulas[0]._id.toString()
                                 }
                             }
                         ]
 
                     });
-
                 } catch (e) {
                     console.error(e);
                     throw e;
                 }
-
             });
-
         });
-
     });
-
 });

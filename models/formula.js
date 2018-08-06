@@ -13,19 +13,19 @@ const formulaSchema = new Schema({
 
 Object.assign(formulaSchema.statics, {
 
-    findById(_id) {
+    findById (_id) {
         return this.findOne({_id});
     },
 
-    findByUserId(userId) {
-      return this.find({
-        userId
-      }).sort({
-          updatedAt: -1
-      });
+    findByUserId (userId) {
+        return this.find({
+            userId
+        }).sort({
+            updatedAt: -1
+        });
     },
 
-    deleteAllByUserId(userId) {
+    deleteAllByUserId (userId) {
         return this.remove({userId});
     }
 });

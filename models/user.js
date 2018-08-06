@@ -6,7 +6,7 @@ const Schema = mongoose.Schema;
 
 const bcrypt = require('bcryptjs');
 
-//TODO make email unique
+// TODO make email unique
 const userSchema = new Schema({
     name: String,
     lastName: String,
@@ -20,19 +20,19 @@ const userSchema = new Schema({
 
 Object.assign(userSchema.statics, {
 
-    findByEmail(email) {
-      return this.findOne({
-        email
-      })
+    findByEmail (email) {
+        return this.findOne({
+            email
+        });
     },
 
-    findById(id) {
+    findById (id) {
         return this.findOne({
             _id: id
-        })
+        });
     },
 
-    async deleteById(id) {
+    async deleteById (id) {
         const user = await this.findById(id);
 
         await Formula.deleteAllByUserId(id);
@@ -44,16 +44,16 @@ Object.assign(userSchema.statics, {
 
 Object.assign(userSchema.methods, {
 
-    getUserFormulas() {
+    getUserFormulas () {
         return Formula.findByUserId(this._id);
     },
 
-    async hashPassword() {
+    async hashPassword () {
         const salt = await bcrypt.genSalt(10);
         this.password = await bcrypt.hash(this.password, salt);
     },
 
-    isValidPassword(candidatePassword) {
+    isValidPassword (candidatePassword) {
         return bcrypt.compare(candidatePassword, this.password);
     }
 });

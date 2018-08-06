@@ -6,12 +6,13 @@
     "watch": "webpack --watch -d",
     "api": "nodemon app.js",
     "frontend": "nodemon ./react-src/web.js",
-    "test": "mocha --recursive unit_tests && mocha --recursive integration_specs"
+    "test": "mocha --recursive unit_tests && mocha --recursive integration_specs",
+    "lint": "eslint ."
   },
   "dependencies": {
     "axios": "^0.15.3",
     "bcryptjs": "^2.4.3",
-    "body-parser": "~1.17.1",
+    "body-parser": "^1.18.3",
     "cors": "^2.8.3",
     "dotenv": "^4.0.0",
     "express": "~4.15.2",
@@ -19,7 +20,7 @@
     "jsonwebtoken": "^7.4.1",
     "mongoose": "^4.10.6",
     "passport": "^0.3.2",
-    "passport-jwt": "^2.2.1",
+    "passport-jwt": "^4.0.0",
     "react": "^15.5.0",
     "react-bootstrap": "^0.30.8",
     "react-dom": "^15.5.0",
@@ -29,13 +30,18 @@
   },
   "devDependencies": {
     "babel-cli": "^6.24.0",
-    "chai": "^3.5.0",
-    "mocha": "^3.2.0",
-    "webpack": "^2.2.1",
     "babel-core": "^6.18.2",
     "babel-loader": "^6.2.7",
     "babel-polyfill": "^6.16.0",
     "babel-preset-es2015": "^6.18.0",
-    "babel-preset-react": "^6.16.0"
+    "babel-preset-react": "^6.16.0",
+    "chai": "^3.5.0",
+    "eslint": "^5.3.0",
+    "eslint-plugin-import": "^2.13.0",
+    "eslint-plugin-node": "^7.0.1",
+    "eslint-plugin-promise": "^3.8.0",
+    "eslint-plugin-standard": "^3.1.0",
+    "mocha": "^3.2.0",
+    "webpack": "^2.2.1"
   }
 }

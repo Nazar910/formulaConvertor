@@ -2,7 +2,7 @@
 const serializer = require('../serializers/formula');
 const repository = require('../repositories/formula');
 
-async function create(req, res) {
+async function create (req, res) {
     try {
         const { userId } = req.params;
 
@@ -24,11 +24,11 @@ async function create(req, res) {
     } catch (e) {
         res.json({
             error: [e.message]
-        })
+        });
     }
 }
 
-async function update(req, res) {
+async function update (req, res) {
     try {
         const { formulaId: id } = req.params;
 
@@ -41,15 +41,14 @@ async function update(req, res) {
         };
 
         res.json(result);
-
     } catch (e) {
         res.json({
             error: [e.message]
-        })
+        });
     }
 }
 
-async function remove(req, res) {
+async function remove (req, res) {
     try {
         const { formulaId: id } = req.params;
 
@@ -57,15 +56,15 @@ async function remove(req, res) {
 
         return res.json({
             deleted: true
-        })
+        });
     } catch (e) {
         res.json({
             error: [e.message]
-        })
+        });
     }
 }
 
-async function getAllForUser(req, res) {
+async function getAllForUser (req, res) {
     try {
         const { userId } = req.params;
 
@@ -79,7 +78,7 @@ async function getAllForUser(req, res) {
     } catch (e) {
         res.json({
             error: [e.message]
-        })
+        });
     }
 }
 

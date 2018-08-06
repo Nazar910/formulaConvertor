@@ -2,14 +2,11 @@
 
 const serializer = require('../../serializers/formula');
 const mongoose = require('mongoose');
-const _ = require('lodash');
 
 const expect = require('chai').expect;
 
 describe('formulaSerializer', () => {
-
     it('should serialize formulaBody to json api format', () => {
-
         const _id = mongoose.Types.ObjectId();
         const userId = mongoose.Types.ObjectId();
         const formulaBody = {
@@ -30,7 +27,6 @@ describe('formulaSerializer', () => {
     });
 
     it('should serialize many formulas', () => {
-
         const _id1 = mongoose.Types.ObjectId();
         const userId1 = mongoose.Types.ObjectId();
         const formulaBody1 = {
@@ -54,17 +50,16 @@ describe('formulaSerializer', () => {
         const actual = serializer.serializeMany([formulaBody1, formulaBody2]);
 
         expect(actual).to.deep.equal([
-                {
-                    id: _id1,
-                    type: 'formula',
-                    attributes: formulaBody1
-                },
-                {
-                    id: _id2,
-                    type: 'formula',
-                    attributes: formulaBody2
-                }
-            ]);
-    })
-
+            {
+                id: _id1,
+                type: 'formula',
+                attributes: formulaBody1
+            },
+            {
+                id: _id2,
+                type: 'formula',
+                attributes: formulaBody2
+            }
+        ]);
+    });
 });

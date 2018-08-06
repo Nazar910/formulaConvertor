@@ -2,3 +2,4 @@ node_modules
 react-src/public/javascripts/built
 .idea
 npm-debug.log
+tags
