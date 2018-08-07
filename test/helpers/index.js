@@ -1,7 +1,6 @@
-'use strict';
-
-const User = require('../models/user');
-const Formula = require('../models/formula');
+const { main: startApi } = require('../api');
+const User = require('../api/models/user');
+const Formula = require('../api/models/formula');
 
 async function ensureUser (userBody) {
     const user = new User(userBody);
@@ -29,10 +28,25 @@ function findUser (_id) {
     return User.findById(_id);
 }
 
+async function ensureApi () {
+    await startApi();
+}
+
+async function dropCollections () {
+    if (process.env.NODE_ENV !== 'test') {
+        throw new Error('Will not drop collection until in test env');
+    }
+
+    await User.remove({});
+    await Formula.remove({});
+}
+
 module.exports = {
     ensureUser,
     ensureFormula,
     findFormula,
     deleteUserById,
-    findUser
+    findUser,
+    ensureApi,
+    dropCollections
 };

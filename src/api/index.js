@@ -4,6 +4,8 @@ const bodyParser = require('body-parser');
 const passport = require('passport');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const config = require('../config');
+const logger = require('./logger');
 
 const api = require('./routes');
 
@@ -23,9 +25,9 @@ app.use('/api', api);
 const port = process.env.API_PORT;
 
 async function main () {
-    const mongoUri = process.env.MONGO_URI;
+    const mongoUri = config.get('MONGO_URI');
     await mongoose.connect(mongoUri);
-    console.log('Connected to MongoDB; uri = ' + mongoUri);
+    logger.log('Connected to MongoDB; uri = ' + mongoUri);
 
     app.listen(port, () => {
         console.info(`Server started on port ${port}`);

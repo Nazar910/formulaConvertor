@@ -1,6 +1,6 @@
 'use strict';
 
-const serializer = require('../../serializers/formula');
+const serializer = require('../../../../src/api/serializers/formula');
 const mongoose = require('mongoose');
 
 const expect = require('chai').expect;

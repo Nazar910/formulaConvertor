@@ -1,6 +1,6 @@
 'use strict';
 
-const serializer = require('../../serializers/user');
+const serializer = require('../../../../src/api/serializers/user');
 const mongoose = require('mongoose');
 const _ = require('lodash');
 

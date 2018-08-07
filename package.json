@@ -1,12 +1,15 @@
 {
-  "name": "lab1",
-  "version": "0.0.0",
-  "private": true,
+  "name": "formula-convertor",
+  "version": "0.0.1",
   "scripts": {
     "watch": "webpack --watch -d",
-    "api": "nodemon app.js",
-    "frontend": "nodemon ./react-src/web.js",
-    "test": "mocha --recursive unit_tests && mocha --recursive integration_specs",
+    "api": "nodemon ./api/app.js",
+    "frontend": "nodemon ./frontend/web.js",
+    "test:api-unit": "mocha --opts ./test/api/unit/mocha.opts",
+    "test:api-integration": "mocha --opts ./test/api/integration/mocha.opts",
+    "test:unit": "npm run test:api-unit",
+    "test:integration": "npm run test:api-integration",
+    "test": "npm run test:unit && npm test:integration",
     "lint": "eslint ."
   },
   "dependencies": {
@@ -15,12 +18,13 @@
     "body-parser": "^1.18.3",
     "cors": "^2.8.3",
     "dotenv": "^4.0.0",
-    "express": "~4.15.2",
-    "jade": "~1.11.0",
-    "jsonwebtoken": "^7.4.1",
+    "express": "^4.16.3",
+    "jade": "^1.11.0",
+    "jsonwebtoken": "^8.3.0",
     "mongoose": "^4.10.6",
     "passport": "^0.3.2",
     "passport-jwt": "^4.0.0",
+    "nconf": "^0.10.0",
     "react": "^15.5.0",
     "react-bootstrap": "^0.30.8",
     "react-dom": "^15.5.0",
@@ -41,7 +45,7 @@
     "eslint-plugin-node": "^7.0.1",
     "eslint-plugin-promise": "^3.8.0",
     "eslint-plugin-standard": "^3.1.0",
-    "mocha": "^3.2.0",
+    "mocha": "^5.2.0",
     "webpack": "^2.2.1"
   }
 }

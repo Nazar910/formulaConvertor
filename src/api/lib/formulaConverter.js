@@ -122,7 +122,7 @@ function afterTranslate ({ result, formula, options }) {
         result = buff;
     }
 
-    const matched = result.match ? result.match(/(?![\+\-\*\/])<sup>\w*<\/sup>(?![\+\-\*\/])/g) : '';
+    const matched = result.match ? result.match(/(?![+\-*/])<sup>\w*<\/sup>(?![+\-*/])/g) : '';
     const k = matched ? matched.length : 0;
     if (k > 1) {
         let i = 0;
@@ -159,7 +159,7 @@ function translatePascalToClassic (formula) {
 
 function translateCtoClassic (formula) {
     const options = {
-        exponentiation: /pow\(([\w<?/sup>]*)\,(\w*)\)/g,
+        exponentiation: /pow\(([\w<?/sup>]*),(\w*)\)/g,
         sin: /sin\((.*)\)/g,
         cos: /cos\((.*)\)/g,
         log10: /log10\((.*)\)/g,

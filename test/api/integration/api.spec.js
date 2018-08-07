@@ -1,22 +1,12 @@
-'use strict';
-describe('app', () => {
-    const expect = require('chai').expect;
-    const axios = require('axios');
-    const mongoose = require('mongoose');
-    const _ = require('lodash');
+const expect = require('chai').expect;
+const axios = require('axios');
+const _ = require('lodash');
+const helpers = require('../helpers');
 
-    const helpers = require('../helpers');
+describe('api', () => {
+    before(() => helpers.ensureApi());
 
-    before(() => {
-        process.env.MONGO_URI = 'mongodb://localhost/test_db';
-        process.env.API_PORT = 3300;
-        process.env.SECRET = 'test';
-        require('../index');
-    });
-
-    after(() => {
-        mongoose.connection.db.dropDatabase();
-    });
+    after(() => helpers.dropCollections());
 
     describe('users', () => {
         describe('create', () => {
