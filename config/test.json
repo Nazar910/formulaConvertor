@@ -1,3 +1,5 @@
 {
-    "MONGO_URI": "mongodb://localhost/test_formula-convertor"
+    "MONGO_URI": "mongodb://localhost:27017/test_formula-convertor",
+    "API_PORT": "9000",
+    "JWT_SECRET": "my_secret"
 }

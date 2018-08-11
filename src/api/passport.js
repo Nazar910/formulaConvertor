@@ -1,13 +1,13 @@
+const config = require('../../config');
 const { Strategy: JwtStrategy, ExtractJwt } = require('passport-jwt');
 const User = require('./models/user');
 
 module.exports = function (passport) {
-    'use strict';
     let opts = {};
-    opts.jwtFromRequest = ExtractJwt.fromAuthHeader();
-    opts.secretOrKey = process.env.SECRET;
+    opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
+    opts.secretOrKey = config.get('JWT_SECRET');
     passport.use(new JwtStrategy(opts, (jwtPayload, done) => {
-        User.findById(jwtPayload._doc._id)
+        User.findById(jwtPayload._id)
             .then(user => {
                 return done(null, user);
             })

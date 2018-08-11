@@ -1,222 +1,13 @@
+const config = require('../../../config');
+const request = require('supertest')(`http://localhost:${config.get('API_PORT')}`);
 const expect = require('chai').expect;
-const axios = require('axios');
 const _ = require('lodash');
-const helpers = require('../helpers');
+//const helpers = require('../helpers');
 
-describe('api', () => {
-    before(() => helpers.ensureApi());
-
+xdescribe('api', () => {
     after(() => helpers.dropCollections());
 
-    describe('users', () => {
-        describe('create', () => {
-            describe('with valid userBody', () => {
-                it('should create a user', async () => {
-                    try {
-                        const reqBody = {
-                            data: {
-                                type: 'user',
-                                attributes: {
-                                    name: 'Name',
-                                    lastName: 'lastName',
-                                    email: 'email@example.com',
-                                    password: 'qwerty',
-                                    company: 'some'
-                                }
-                            }
-                        };
-                        const resp = await axios.post('http://localhost:3300/api/users/', reqBody);
 
-                        const actualData = resp.data;
-
-                        expect(actualData.data.type).to.equal('user');
-
-                        const attributes = _.omit(actualData.data.attributes, ['_id']);
-                        const expectedAttributes = _.omit(reqBody.data.attributes, ['password']);
-
-                        expect(attributes).to.deep.equal(expectedAttributes);
-                    } catch (e) {
-                        console.error(e);
-                        throw e;
-                    }
-                });
-            });
-
-            describe('with undefined userBody', () => {
-                it('should cause an error', async () => {
-                    try {
-                        const userBody = {};
-                        const resp = await axios.post('http://localhost:3300/api/users/', userBody);
-
-                        expect(resp.data).to.deep.equal({
-                            error: ['Userbody is undefined!']
-                        });
-                    } catch (e) {
-                        throw e;
-                    }
-                });
-            });
-        });
-
-        describe('update', () => {
-            let user;
-            let token;
-            beforeEach(async () => {
-                try {
-                    const email = 'example@example.com';
-                    const password = 'qwerty';
-
-                    const userBody = {
-                        name: 'Name',
-                        lastName: 'lastName',
-                        email,
-                        password,
-                        company: 'some'
-                    };
-
-                    user = await helpers.ensureUser(userBody);
-
-                    const { data } = await axios.post('http://localhost:3300/api/users/authenticate', {email, password});
-                    token = data.token;
-                } catch (e) {
-                    console.error(e);
-                    throw e;
-                }
-            });
-
-            afterEach(() => helpers.deleteUserById(user._id));
-
-            describe('with valid userBody', () => {
-                it('should update a user', async () => {
-                    try {
-                        const reqBody = {
-                            data: {
-                                type: 'user',
-                                attributes: {
-                                    name: 'NewName',
-                                    email: 'newEmail@example.com'
-                                }
-                            }
-                        };
-                        const resp = await axios({
-                            url: `http://localhost:3300/api/users/${user._id}`,
-                            method: 'PATCH',
-                            headers: {
-                                Authorization: token
-                            },
-                            data: reqBody
-                        });
-
-                        const actualData = resp.data;
-
-                        expect(actualData.data.type).to.equal('user');
-
-                        const attributes = _.omit(actualData.data.attributes, ['_id']);
-
-                        expect(attributes).to.deep.equal({
-                            name: 'NewName',
-                            lastName: 'lastName',
-                            email: 'newEmail@example.com',
-                            company: 'some'
-                        });
-                    } catch (e) {
-                        console.error(e);
-                        throw e;
-                    }
-                });
-            });
-
-            describe('with undefined userBody', () => {
-                it('should cause an error', async () => {
-                    try {
-                        const userBody = {};
-                        const resp = await axios({
-                            url: `http://localhost:3300/api/users/${user._id}`,
-                            method: 'PATCH',
-                            headers: {
-                                Authorization: token
-                            },
-                            data: userBody
-                        });
-
-                        expect(resp.data).to.deep.equal({
-                            error: ['Userbody is undefined!']
-                        });
-                    } catch (e) {
-                        throw e;
-                    }
-                });
-            });
-        });
-
-        describe('delete', () => {
-            let user;
-            let token;
-            let formula;
-            beforeEach(async () => {
-                try {
-                    const email = 'example@example.com';
-                    const password = 'qwerty';
-
-                    const userBody = {
-                        name: 'Name',
-                        lastName: 'lastName',
-                        email,
-                        password,
-                        company: 'some'
-                    };
-
-                    user = await helpers.ensureUser(userBody);
-
-                    const formulaBody = {
-                        body: 'pow(x,2)',
-                        classicView: 'x<sup>2</sup>',
-                        language: 'c',
-                        userId: user._id
-                    };
-
-                    formula = await helpers.ensureFormula(formulaBody);
-
-                    const { data } = await axios.post('http://localhost:3300/api/users/authenticate', {email, password});
-                    token = data.token;
-                } catch (e) {
-                    console.error(e);
-                    throw e;
-                }
-            });
-
-            describe('with valid id', () => {
-                it('should delete a user', async () => {
-                    try {
-                        const resp = await axios({
-                            url: `http://localhost:3300/api/users/${user._id}`,
-                            method: 'DELETE',
-                            headers: {
-                                Authorization: token
-                            }
-                        });
-
-                        const actualData = resp.data;
-
-                        expect(actualData.deleted).to.equal(true);
-
-                        const deletedUser = await helpers.findUser(user._id);
-
-                        expect(deletedUser).to.be.equal(null);
-
-                        const formulaId = formula._id.toString();
-
-                        const deletedFormula = await helpers.findFormula(formulaId);
-
-                        expect(deletedFormula).to.be.equal(null);
-                    } catch (e) {
-                        console.error(e);
-                        throw e;
-                    }
-                });
-            });
-        });
-    });
 
     describe('formulas', () => {
         let user;
@@ -235,7 +26,7 @@ describe('api', () => {
                 };
 
                 user = await helpers.ensureUser(userBody);
-                const { data } = await axios.post('http://localhost:3300/api/users/authenticate', {email, password});
+                const { data } = await request.post('/api/users/authenticate', {email, password});
                 token = data.token;
             } catch (e) {
                 console.error(e);
@@ -258,14 +49,9 @@ describe('api', () => {
                             }
 
                         };
-                        const resp = await axios({
-                            url: `http://localhost:3300/api/formulas/${user.id}`,
-                            method: 'POST',
-                            data: formulaBody,
-                            headers: {
-                                Authorization: token
-                            }
-                        });
+                        const resp = await request
+                            .post(`/api/formulas/${user.id}`, formulaBody)
+                            .set({Authorization: token});
 
                         const { data: actualData } = resp.data;
 
@@ -288,14 +74,9 @@ describe('api', () => {
                 it('should cause an error', async () => {
                     try {
                         const formulaBody = {};
-                        const resp = await axios({
-                            url: `http://localhost:3300/api/formulas/${user.id}`,
-                            method: 'POST',
-                            data: formulaBody,
-                            headers: {
-                                Authorization: token
-                            }
-                        });
+                        const resp = await request
+                            .post(`/api/formulas/${user.id}`, formulaBody)
+                            .set({Authorization: token});
 
                         expect(resp.data).to.deep.equal({
                             error: ['FormulasBody is undefined!']
@@ -323,8 +104,9 @@ describe('api', () => {
                 it('should delete a formula', async () => {
                     try {
                         const formulaId = formula._id.toString();
-                        const resp = await axios({
-                            url: `http://localhost:3300/api/formulas/${formulaId}`,
+                        const resp = await request
+                            .delete({
+                            url: `/api/formulas/${formulaId}`,
                             method: 'DELETE',
                             headers: {
                                 Authorization: token
@@ -371,7 +153,7 @@ describe('api', () => {
                         };
 
                         const resp = await axios({
-                            url: `http://localhost:3300/api/formulas/${formulaId}`,
+                            url: `/api/formulas/${formulaId}`,
                             method: 'PATCH',
                             data: newFormula,
                             headers: {
@@ -444,7 +226,7 @@ describe('api', () => {
             it('should get user formulas', async () => {
                 try {
                     const { data: responseData } = await axios({
-                        url: `http://localhost:3300/api/formulas/${user.id}`,
+                        url: `/api/formulas/${user.id}`,
                         method: 'GET',
                         headers: {
                             Authorization: token
