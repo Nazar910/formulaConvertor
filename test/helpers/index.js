@@ -5,16 +5,31 @@ const {
 } = models;
 
 async function ensureUser (userBody) {
-    const user = new User(userBody);
-    await user.hashPassword();
+    let user = await User.findOne({email: userBody.email});
 
-    return user.save();
+    if (!user) {
+        user = new User(userBody);
+        await user.hashPassword();
+        await user.save();
+    }
+
+    return user;
 }
 
 async function deleteUserById (userId) {
     const user = await User.findById(userId);
 
     return user.remove();
+}
+
+/**
+ * Deletes formula by id
+ * @param {String|ObjectId} formulaId
+ *
+ * @return {Promise<undefined>}
+ */
+async function deleteFormulaById (formulaId) {
+    await Formula.remove({_id: formulaId});
 }
 
 function ensureFormula (formulaBody) {
@@ -53,5 +68,6 @@ module.exports = {
     deleteUserById,
     findUser,
     ensureApi,
-    dropCollections
+    dropCollections,
+    deleteFormulaById
 };

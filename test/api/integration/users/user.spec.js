@@ -57,7 +57,7 @@ describe('users', () => {
         });
     });
 
-    describe('update', () => {
+    describe('PATCH', () => {
         let user;
         let token;
         beforeEach(async () => {
@@ -133,7 +133,7 @@ describe('users', () => {
         });
     });
 
-    describe('delete', () => {
+    describe('DELETE', () => {
         let user;
         let token;
         let formula;

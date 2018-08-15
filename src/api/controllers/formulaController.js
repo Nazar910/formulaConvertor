@@ -1,90 +1,59 @@
-'use strict';
 const serializer = require('../serializers/formula');
 const repository = require('../repositories/formula');
+const logger = require('../logger');
+const { middleWarifyAsync } = require('../middleware');
+const { BadRequest } = require('../errors');
 
 async function create (req, res) {
-    try {
-        const { userId } = req.params;
+    const { userId } = req.params;
+    logger.info('In /api/formulas POST', userId);
 
-        const { data: formulaBody } = req.body;
+    const { data: formulaBody } = req.body;
 
-        if (!formulaBody) {
-            return res.json({
-                error: ['FormulasBody is undefined!']
-            });
-        }
-
-        const formula = await repository.createFormula(formulaBody, userId);
-
-        const result = {
-            data: serializer.serializeData(formula)
-        };
-
-        res.json(result);
-    } catch (e) {
-        res.json({
-            error: [e.message]
-        });
+    if (!formulaBody) {
+        logger.error('Formula body is not provided');
+        throw new BadRequest('You should pass valid formula data');
     }
+
+    const formula = await repository.createFormula(formulaBody, userId);
+
+    res.data = serializer.serializeData(formula);
+    res.statusCode = 201;
 }
 
 async function update (req, res) {
-    try {
-        const { formulaId: id } = req.params;
+    const { formulaId: id } = req.params;
+    logger.info('In /api/formulas/formulaId PATCH', id);
 
-        const { body } = req.body;
+    const { body } = req.body;
 
-        const formula = await repository.updateFormula(id, body);
+    const formula = await repository.updateFormula(id, body);
 
-        const result = {
-            data: serializer.serializeData(formula)
-        };
-
-        res.json(result);
-    } catch (e) {
-        res.json({
-            error: [e.message]
-        });
-    }
+    res.data = serializer.serializeData(formula);
+    res.statusCode = 200;
 }
 
 async function remove (req, res) {
-    try {
-        const { formulaId: id } = req.params;
+    const { formulaId: id } = req.params;
+    logger.info('In /api/formulas/formulaId DELETE', id);
+    await repository.deleteFormula(id);
 
-        await repository.deleteFormula(id);
-
-        return res.json({
-            deleted: true
-        });
-    } catch (e) {
-        res.json({
-            error: [e.message]
-        });
-    }
+    res.statusCode = 204;
+    res.data = {};
 }
 
 async function getAllForUser (req, res) {
-    try {
-        const { userId } = req.params;
+    const { userId } = req.params;
+    logger.info('In /api/formulas/userId GET', userId);
+    const formulas = await repository.getAllForUser(userId);
+    console.log('Formulas', formulas);
 
-        const formulas = await repository.getAllForUser(userId);
-
-        const result = {
-            data: serializer.serializeMany(formulas)
-        };
-
-        res.json(result);
-    } catch (e) {
-        res.json({
-            error: [e.message]
-        });
-    }
+    res.data = serializer.serializeMany(formulas);
 }
 
 module.exports = {
-    create,
-    getAllForUser,
-    remove,
-    update
+    create: middleWarifyAsync(create),
+    getAllForUser: middleWarifyAsync(getAllForUser),
+    remove: middleWarifyAsync(remove),
+    update: middleWarifyAsync(update)
 };
