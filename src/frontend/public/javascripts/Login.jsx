@@ -14,6 +14,8 @@ class Login extends React.Component {
     }
 
     onSubmit() {
+        console.log(this.refs.email.value);
+        console.log(this.refs.password.value);
         axios.post('http://localhost:9000/api/users/authenticate', {
             email: this.refs.email.value,
             password: this.refs.password.value

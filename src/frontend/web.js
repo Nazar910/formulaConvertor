@@ -1,4 +1,4 @@
-'use strict';
+const config = require('../../config');
 const express = require('express');
 const path = require('path');
 
@@ -19,7 +19,7 @@ app.use('/', (req, res) => {
     res.render('index', { title: 'Express' });
 });
 
-const port = process.env.FRONTEND_PORT;
+const port = config.get('FRONTEND_PORT');
 app.listen(port, () => {
     console.info(`Frontend started on port ${port}`);
 });
