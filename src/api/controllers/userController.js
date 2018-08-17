@@ -59,11 +59,6 @@ async function authenticateUser (req, res) {
 
     const user = await repository.authenticateUser(email, password);
 
-    if (user.error) {
-        logger.error('Got error', user.error);
-        return res.json(user.error);
-    }
-
     const userObj = user.toObject();
     const token = jwt.sign(userObj, config.get('JWT_SECRET'), {
         expiresIn: 604800

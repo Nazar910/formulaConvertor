@@ -31,7 +31,16 @@ class BadRequest extends BaseError {
     }
 }
 
+class Unauthorized extends BaseError {
+    constructor (msg) {
+        super(msg);
+        this.title = 'Unauthorized';
+        this.status = 401;
+        this.code = 401;
+    }
+}
 module.exports = {
     NotFound,
-    BadRequest
+    BadRequest,
+    Unauthorized
 };

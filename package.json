@@ -4,7 +4,9 @@
   "scripts": {
     "watch": "webpack --watch -d",
     "api": "node ./src/api/index.js",
+    "api:dev": "NODE_ENV=development node ./src/api/index.js",
     "frontend": "node ./src/frontend/web.js",
+    "frontend:dev": "NODE_ENV=development node ./src/frontend/web.js",
     "test:api-unit": "mocha --opts ./test/api/unit/mocha.opts",
     "test:api-integration": "NODE_ENV=test mocha --opts ./test/api/integration/mocha.opts",
     "test:unit": "npm run test:api-unit",

@@ -1,5 +1,7 @@
 const User = require('../models/user');
 const _ = require('lodash');
+const logger = require('../logger');
+const { Unauthorized } = require('../errors');
 
 async function createUser (userBody) {
     const user = new User(userBody);
@@ -24,22 +26,22 @@ async function deleteUser (userId) {
 }
 
 async function authenticateUser (email, password) {
+    console.log('Email', email);
+    console.log('Password ', password);
     const user = await User.findByEmail(email);
+    console.log('user Email', user.email);
+    console.log('user Password ', user.password);
 
     if (!user) {
-        return {
-            error: 'User with such email not found!',
-            success: false
-        };
+        logger.error('User with such email not found!');
+        throw new Unauthorized('User with such email not found!');
     }
 
     const validPassword = await user.isValidPassword(password);
 
     if (!validPassword) {
-        return {
-            error: 'Password or email is not valid!',
-            success: false
-        };
+        logger.error('Password or email is not valid!');
+        throw new Unauthorized('Password or email is not valid!');
     }
 
     return user;

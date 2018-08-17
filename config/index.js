@@ -7,7 +7,8 @@ nconf.env();
 nconf.required([
     'MONGO_URI',
     'API_PORT',
-    'JWT_SECRET'
+    'JWT_SECRET',
+    'FRONTEND_PORT'
 ]);
 
 module.exports = nconf;

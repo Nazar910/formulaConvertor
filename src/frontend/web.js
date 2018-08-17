@@ -19,7 +19,15 @@ app.use('/', (req, res) => {
     res.render('index', { title: 'Express' });
 });
 
-const port = config.get('FRONTEND_PORT');
-app.listen(port, () => {
-    console.info(`Frontend started on port ${port}`);
-});
+async function main () {
+    const port = config.get('FRONTEND_PORT');
+    app.listen(port, () => {
+        console.info(`Frontend started on port ${port}`);
+    });
+}
+
+if (!module.parent) {
+    main();
+}
+
+module.exports.main = main;

@@ -19,7 +19,8 @@ class Login extends React.Component {
         axios.post('http://localhost:9000/api/users/authenticate', {
             email: this.refs.email.value,
             password: this.refs.password.value
-        }).then( ({ data }) => {
+        }).then( ({ data: body }) => {
+            const { data } = body;
             if (!data.token) {
                 return this.setState({
                     error: 'Email or Password are incorrect!'
