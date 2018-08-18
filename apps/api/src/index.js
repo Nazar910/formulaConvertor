@@ -21,16 +21,30 @@ app.use(cors({ origin: '*' }));
 
 app.use('/api', api);
 
+let server;
 async function main () {
     const mongoUri = config.get('MONGO_URI');
     await mongoose.connect(mongoUri, { useNewUrlParser: true });
     logger.info('Connected to MongoDB; uri = ' + mongoUri);
 
     const port = config.get('API_PORT');
-    app.listen(port, () => {
+    server = app.listen(port, () => {
         logger.info(`Server started on port ${port}`);
     });
 }
+
+process.on('SIGTERM', async () => {
+    logger.info('Received SIGTERM, going to shutdown server.');
+    const { connection } = mongoose;
+    if (connection) {
+        await connection.close();
+    }
+
+    if (server) {
+        server.close();
+    }
+    logger.info('Exited... Buy :)');
+});
 
 if (!module.parent) {
     main();
