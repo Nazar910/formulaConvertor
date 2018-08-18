@@ -1,0 +1,4 @@
+--recursive
+--exit
+./test/integration/bootstrap.js
+./test/integration/**/**.spec.js

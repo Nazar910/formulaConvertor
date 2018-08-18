@@ -1,4 +1,0 @@
---recursive
---exit
-./test/api/integration/bootstrap.js
-./test/api/integration/**/**.spec.js
