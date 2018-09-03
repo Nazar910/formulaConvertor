@@ -1,4 +1,4 @@
-# Base image with formula-converter-api source only
+# Base image with formula-converter-frontend source only
 FROM node:8-alpine AS base
 WORKDIR /usr/src/app
 COPY src src
@@ -10,7 +10,7 @@ FROM base AS dependencies
 RUN apk add --no-cache make gcc g++ python
 RUN npm install --production --quiet
 
-# Release image for running api
+# Release image for running frontend
 FROM base AS release
 COPY --from=dependencies /usr/src/app/node_modules ./node_modules
 RUN rm -f package-lock.json

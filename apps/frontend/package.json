@@ -3,8 +3,8 @@
   "version": "0.0.1",
   "scripts": {
     "watch": "webpack --watch -d",
-    "frontend": "node ./src/index.js",
-    "frontend:dev": "NODE_ENV=development node ./src/index.js",
+    "start": "node ./src/index.js",
+    "dev": "NODE_ENV=development node ./src/index.js",
     "test": "npm run lint",
     "lint": "eslint ."
   },
