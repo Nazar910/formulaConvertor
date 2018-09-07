@@ -3,7 +3,7 @@ import axios from 'axios';
 
 import FormulaList from './FormulaList.jsx';
 
-import { formulas } from './api';
+import api from './api';
 
 async function getUserFormulas(userId, token) {
     /*console.log('GET USER FORMULAS');
@@ -20,8 +20,9 @@ async function getUserFormulas(userId, token) {
         }).catch(reject);
     });
     return res;*/
-    console.log(formulas);
-    return formulas.getUserFormulas(userId);
+    console.log(api);
+    const res = await api.formulas.getUserFormulas(userId);
+    return await res.json();
 }
 
 class Editor extends React.Component {
