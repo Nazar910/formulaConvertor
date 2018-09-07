@@ -13,7 +13,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // the most important route
 app.use('/', (req, res) => {
-    res.render('index', { title: 'Express' });
+    res.render('index', { title: 'Express', apiUri: config.get('API_URI') });
 });
 
 async function main () {

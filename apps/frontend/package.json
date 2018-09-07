@@ -2,7 +2,7 @@
   "name": "formula-convertor",
   "version": "0.0.1",
   "scripts": {
-    "watch": "webpack --watch -d",
+    "watch": "webpack --watch -d --progress --colors",
     "start": "node ./src/index.js",
     "dev": "NODE_ENV=development node ./src/index.js",
     "test": "npm run lint",

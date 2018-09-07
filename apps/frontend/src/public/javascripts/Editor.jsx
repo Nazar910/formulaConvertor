@@ -3,9 +3,11 @@ import axios from 'axios';
 
 import FormulaList from './FormulaList.jsx';
 
-function getUserFormulas(userId, token) {
-    console.log('GET USER FORMULAS');
-    return new Promise((resolve, reject) => {
+import { formulas } from './api';
+
+async function getUserFormulas(userId, token) {
+    /*console.log('GET USER FORMULAS');
+    const res = await new Promise((resolve, reject) => {
         axios({
             url: `http://localhost:9000/api/formulas/${userId}`,
             method: 'GET',
@@ -16,7 +18,10 @@ function getUserFormulas(userId, token) {
             console.log('FORMULAS', data);
             resolve(data);
         }).catch(reject);
-    })
+    });
+    return res;*/
+    console.log(formulas);
+    return formulas.getUserFormulas(userId);
 }
 
 class Editor extends React.Component {
@@ -30,6 +35,8 @@ class Editor extends React.Component {
             user: {},
             isUnauthenticated: false
         }
+
+        this.onLangChange = this.onLangChange.bind(this);
     }
 
     componentDidMount() {

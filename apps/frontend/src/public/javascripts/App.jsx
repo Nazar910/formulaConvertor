@@ -16,6 +16,11 @@ class App extends React.Component {
         }
     }
 
+    componentDidMount() {
+        const { content } = document.querySelector('meta[name="api-uri"');
+        process.env.API_URI = content;
+    }
+
     updateToken(token) {
         this.setState({
             token

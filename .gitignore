@@ -1,5 +1,4 @@
 node_modules
-src/frontend/public/javascripts/built
 .idea
 npm-debug.log
 tags
