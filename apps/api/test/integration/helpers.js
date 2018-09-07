@@ -23,11 +23,10 @@ async function deleteUserById (userId) {
 }
 
 /**
- *  * Deletes formula by id
- *   * @param {String|ObjectId} formulaId
- *    *
- *     * @return {Promise<undefined>}
- *      */
+ * Deletes formula by id
+ * @param {String|ObjectId} formulaId
+ * @returns {Promise<undefined>}
+ */
 async function deleteFormulaById (formulaId) {
     await Formula.remove({_id: formulaId});
 }
