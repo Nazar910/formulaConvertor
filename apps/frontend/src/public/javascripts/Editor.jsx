@@ -1,29 +1,8 @@
 import React from 'react';
-import axios from 'axios';
 
 import FormulaList from './FormulaList.jsx';
 
 import api from './api';
-
-async function getUserFormulas(userId, token) {
-    /*console.log('GET USER FORMULAS');
-    const res = await new Promise((resolve, reject) => {
-        axios({
-            url: `http://localhost:9000/api/formulas/${userId}`,
-            method: 'GET',
-            headers: {
-                Authorization: token
-            }
-        }).then(({data}) => {
-            console.log('FORMULAS', data);
-            resolve(data);
-        }).catch(reject);
-    });
-    return res;*/
-    console.log(api);
-    const res = await api.formulas.getUserFormulas(userId);
-    return await res.json();
-}
 
 class Editor extends React.Component {
     constructor(...args) {
@@ -40,48 +19,13 @@ class Editor extends React.Component {
         this.onLangChange = this.onLangChange.bind(this);
     }
 
-    componentDidMount() {
-        const { token } = this.props;
-        axios({
-            url: 'http://localhost:9000/api/users/profile',
-            method: 'GET',
-            headers: {
-                Authorization: token
-            }
-        }).then(({data, statusCode}) => {
-            if (statusCode === 403) {
-                throw new Error('UnAuthorized');
-            }
-
-            return data.user;
-        }).then(user => {
-            getUserFormulas(user._id, token)
-                .then(formulas => {
-                    console.log(formulas);
-                    this.setState({
-                        user,
-                        formulaList: formulas.data
-                    }, () => console.log(this.state));
-                })
-                .catch(e => {
-                    this.setState({
-                        error: e.message
-                    })
-                })
-
-        }).catch(e => {
-            if (e.message === 'UnAuthorized') {
-                this.setState({
-                    isUnauthenticated: true
-                })
-            }
-
-            console.error(e);
-            this.setState({
-                error: e.message
-            })
-        })
-
+    async componentDidMount() {
+        const { user } = await api.users.getUserProfile();
+        const formulas = await api.formulas.getUserFormulas(user._id);
+        this.setState({
+            user,
+            formulaList: formulas.data
+        });
     }
 
     convertToClassicView(value){
@@ -95,35 +39,18 @@ class Editor extends React.Component {
             }
         };
 
-        const { token } = this.props;
-
-        return axios({
-            url: 'http://localhost:9000/api/formulas/' + this.state.user._id,
-            method: 'POST',
-            data: formulaBody,
-            headers: {
-                Authorization: token
-            }
-        });
+        return api.formulas.postOne(this.state.user._id, formulaBody);
     }
 
-    processInputFormula() {
+    async processInputFormula() {
         const input = this.refs.inputFormula.value;
-        this.convertToClassicView(input)
-            .then(({ data }) => {
-                if (data.error) {
-                    return this.setState({
-                        error
-                    })
-                }
+        const { data } = await this.convertToClassicView(input)
+        const arr = this.state.formulaList;
 
-                const arr = this.state.formulaList;
-
-                arr.unshift(data.data);
-                this.setState({
-                    formulaList: arr
-                });
-            })
+        arr.unshift(data);
+        this.setState({
+            formulaList: arr
+        });
     }
 
     onLangChange(event) {
@@ -132,83 +59,40 @@ class Editor extends React.Component {
         })
     }
 
-    updateFormula(id, body, index) {
-        const { token } = this.props;
+    async updateFormula(id, body, index) {
+        const data = await api.formulas.patchOne(id, {
+            body
+        });
+        const arr = this.state.formulaList;
 
-        axios({
-            url: 'http://localhost:9000/api/formulas/' + id,
-            method: 'PATCH',
-            data: {
-                body
-            },
-            headers: {
-                Authorization: token
-            }
-        })
-            .then(({data}) => {
-                const arr = this.state.formulaList;
+        arr[index].attributes.body = body;
+        arr[index].attributes.classicView = data.data.attributes.classicView;
 
-                arr[index].attributes.body = body;
-                arr[index].attributes.classicView = data.data.attributes.classicView;
-
-                this.setState({
-                    formulaList: arr
-                })
-            })
+        this.setState({
+            formulaList: arr
+        });
     }
 
-    deleteFormula(index, id) {
-        const { token } = this.props;
-
-        axios({
-            url: 'http://localhost:9000/api/formulas/' + id,
-            method: 'DELETE',
-            headers: {
-                Authorization: token
-            }
-        })
-            .then(({data}) => {
-                if (data.deleted === true) {
-                    const formulaList = this.state.formulaList;
-                    formulaList.splice(index, 1);
-                    console.log(formulaList);
-                    this.setState({
-                        formulaList
-                    })
-                }
-            })
+    async deleteFormula(index, id) {
+        await api.formulas.deleteOne(id)
+        const formulaList = this.state.formulaList;
+        formulaList.splice(index, 1);
+        this.setState({
+            formulaList
+        });
     }
 
     logout() {
         this.props.logout();
     }
 
-    deleteAccount() {
-        const DeleteWindow = 'Are you sure you want to delete your account?';
+    async deleteAccount() {
+        const windowMessage = 'Are you sure you want to delete your account?';
 
-        if (confirm(DeleteWindow)) {
-            axios.post('http://localhost:9000/api/users/authenticate', {
-                email: this.state.user.email,
-                password: this.state.user.password
-            }).then( () => {
-                axios({
-                    url: `http://localhost:9000/api/users/${this.state.user._id}`,
-                    method: 'DELETE',
-                    headers: {
-                        Authorization: this.props.token
-                    }
-                })
-                    .then(({data}) => {
-                        if (data.deleted) {
-                            this.logout.call(this);
-                            return;
-                        }
-
-                        this.setState({error: data.error});
-                    })
-            });
+        if (confirm(windowMessage)) {
+            await api.users.deleteOne(this.state.user._id)
+            this.logout.call(this);
         }
-
     }
 
     render() {
