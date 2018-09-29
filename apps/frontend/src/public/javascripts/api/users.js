@@ -1,14 +1,14 @@
 import BaseClient from './base';
 
 export default class Users extends BaseClient {
-    constructor(token) {
+    constructor (token) {
         super(token);
     }
 
     /**
      * Get user profile
      */
-    async getUserProfile() {
+    async getUserProfile () {
         const response = await this.get('/api/users/profile');
         return await response.json();
     }
@@ -20,7 +20,7 @@ export default class Users extends BaseClient {
      * @returns {Promise} promise that resolves when request is finished
      * @throws {Error} if status code is not 204
      */
-    async deleteOne(userId) {
+    async deleteOne (userId) {
         const response = await this.delete(`/api/users/${userId}`);
 
         if (response.status !== 204) {
@@ -36,7 +36,7 @@ export default class Users extends BaseClient {
      * @returns {Promise} promise that resolves when update of token is done
      * @throws {Error} when email or password is invalid
      */
-    async authenticate(email, password) {
+    async authenticate (email, password) {
         const response = await this.post(`/api/users/authenticate`, {
             email,
             password
@@ -53,7 +53,7 @@ export default class Users extends BaseClient {
     /**
      * Checks whether token is valid
      */
-    async checkIfLoggedIn() {
+    async checkIfLoggedIn () {
         const response = await this.get('/api/users/profile');
 
         if (response.status !== 200) {

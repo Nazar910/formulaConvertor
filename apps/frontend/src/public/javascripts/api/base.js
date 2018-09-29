@@ -3,7 +3,7 @@ export default class BaseClient {
      * @constructor
      * @param {String} token - jwt token to authorize with
      */
-    constructor(token) {
+    constructor (token) {
         this.token = token;
         this.baseUrl = document.querySelector('meta[name="api-uri"]').content;
     }
@@ -17,7 +17,7 @@ export default class BaseClient {
      *
      * @returns {Promise} promise that resolves with response
      */
-    makeRequest(url, method, body) {
+    makeRequest (url, method, body) {
         const options = {};
         options.headers = {
             Authorization: this.token
@@ -38,7 +38,7 @@ export default class BaseClient {
      *
      * @returns {Promise} promise that resolves with response
      */
-    get(url) {
+    get (url) {
         return this.makeRequest(url, 'GET');
     }
 
@@ -49,7 +49,7 @@ export default class BaseClient {
      *
      * @returns {Promise} promise that resolves with response
      */
-    post(url, body) {
+    post (url, body) {
         return this.makeRequest(url, 'POST', body);
     }
 
@@ -60,7 +60,7 @@ export default class BaseClient {
      *
      * @returns {Promise} promise that resolves with response
      */
-    patch(url, body) {
+    patch (url, body) {
         return this.makeRequest(url, 'PATCH', body);
     }
 
@@ -70,7 +70,7 @@ export default class BaseClient {
      *
      * @returns {Promise} promise that resolves with response
      */
-    delete(url) {
+    delete (url) {
         return this.makeRequest(url, 'DELETE');
     }
 }

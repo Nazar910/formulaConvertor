@@ -1,11 +1,7 @@
 import BaseClient from './base';
 
 export default class Formulas extends BaseClient {
-    constructor(token) {
-        super(token);
-    }
-
-    async getUserFormulas(userId) {
+    async getUserFormulas (userId) {
         const response = await this.get(`/api/formulas/${userId}`);
         return response.json();
     }
@@ -17,7 +13,7 @@ export default class Formulas extends BaseClient {
      *
      * @returns {Promise} promise that resolves with response
      */
-    async postOne(userId, body) {
+    async postOne (userId, body) {
         const response = await this.post(`/api/formulas/${userId}`, body);
         return response.json();
     }
@@ -29,7 +25,7 @@ export default class Formulas extends BaseClient {
      *
      * @returns {Promise} promise that resolves with response
      */
-    async patchOne(formulaId, body) {
+    async patchOne (formulaId, body) {
         const response = await this.patch(`/api/formulas/${formulaId}`, body);
         return response.json();
     }
@@ -41,7 +37,7 @@ export default class Formulas extends BaseClient {
      * @returns {Promise} promise that resolves when request is done
      * @throws {Error} when status code is not 204
      */
-    async deleteOne(formulaId) {
+    async deleteOne (formulaId) {
         const response = await this.delete(`/api/formulas/${formulaId}`);
 
         if (response.status !== 204) {
