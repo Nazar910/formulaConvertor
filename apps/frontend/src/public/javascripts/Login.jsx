@@ -16,12 +16,12 @@ class Login extends React.Component {
     async onSubmit() {
         try {
             const token = await api.users.authenticate(this.refs.email.value, this.refs.password.value);
-            this.props.login(token);
+            this.props.saveToken(token);
         } catch (_) {
             console.error(_);
             this.setState({
                 error: 'Email or Password are incorrect!'
-            })
+            });
         }
     }
 

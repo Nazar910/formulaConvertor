@@ -5,6 +5,8 @@ import Register from './Register.jsx';
 
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 
+import api from './api';
+
 
 class App extends React.Component {
     constructor(...args) {
@@ -18,7 +20,15 @@ class App extends React.Component {
 
     async componentDidMount() {
         //call profile
-        //if success then token should already be in the local storage
+        try {
+            await api.users.getUserProfile();
+            //if success then token should already be in the local storage
+            this.setState({
+                loggedIn: true
+            });
+        } catch (_) {
+            //something
+        }
     }
 
     register() {

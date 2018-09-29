@@ -10,7 +10,7 @@ export default class Users extends BaseClient {
      */
     async getUserProfile () {
         const response = await this.get('/api/users/profile');
-        return await response.json();
+        return response.json();
     }
 
     /**
