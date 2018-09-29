@@ -26,11 +26,7 @@ async function deleteUser (userId) {
 }
 
 async function authenticateUser (email, password) {
-    console.log('Email', email);
-    console.log('Password ', password);
     const user = await User.findByEmail(email);
-    console.log('user Email', user.email);
-    console.log('user Password ', user.password);
 
     if (!user) {
         logger.error('User with such email not found!');

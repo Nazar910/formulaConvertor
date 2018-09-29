@@ -5,22 +5,30 @@ import Register from './Register.jsx';
 
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 
+import api from './api';
+
 
 class App extends React.Component {
     constructor(...args) {
         super(...args);
 
         this.state = {
-            token: localStorage.getItem('token'),
+            loggedIn: false,
             registered: false
         }
     }
 
-    updateToken(token) {
-        this.setState({
-            token
-        });
-        localStorage.setItem('token', token);
+    async componentDidMount() {
+        //call profile
+        try {
+            await api.users.getUserProfile();
+            //if success then token should already be in the local storage
+            this.setState({
+                loggedIn: true
+            });
+        } catch (_) {
+            //something
+        }
     }
 
     register() {
@@ -29,17 +37,28 @@ class App extends React.Component {
         });
     }
 
+    login(token) {
+        this.setState({ loggedIn: true });
+        localStorage.setItem('token', token);
+    }
+
+    logout() {
+        this.setState({
+            loggedIn: false
+        });
+    }
+
     render() {
         return (
             <BrowserRouter>
                 <Switch>
                     <Route exact path="/" render={() =>
-                        this.state.token ?
+                        this.state.loggedIn ?
                             <Redirect to="/editor"/> :
-                            <Login updateToken={this.updateToken.bind(this)}/>}/>
+                            <Login saveToken={this.login.bind(this)}/>}/>
                     <Route path="/editor" render={() =>
-                        this.state.token ?
-                            <Editor token={this.state.token} logout={() => this.updateToken('')}/> :
+                        this.state.loggedIn ?
+                            <Editor logout={this.logout.bind(this)}/> :
                             <Redirect to="/"/>}/>
                     <Route path="/register" render={() =>
                         this.state.registered ?
