@@ -1,6 +1,6 @@
 'use strict';
 import React from 'react';
-import axios from 'axios';
+import api from './api';
 
 import { Link } from 'react-router-dom';
 
@@ -13,22 +13,16 @@ class Login extends React.Component {
         }
     }
 
-    onSubmit() {
-        console.log(this.refs.email.value);
-        console.log(this.refs.password.value);
-        axios.post('http://localhost:9000/api/users/authenticate', {
-            email: this.refs.email.value,
-            password: this.refs.password.value
-        }).then( ({ data: body }) => {
-            const { data } = body;
-            if (!data.token) {
-                return this.setState({
-                    error: 'Email or Password are incorrect!'
-                })
-            }
-
-            this.props.updateToken(data.token);
-        });
+    async onSubmit() {
+        try {
+            const token = await api.users.authenticate(this.refs.email.value, this.refs.password.value);
+            this.props.saveToken(token);
+        } catch (_) {
+            console.error(_);
+            this.setState({
+                error: 'Email or Password are incorrect!'
+            });
+        }
     }
 
     render(){
